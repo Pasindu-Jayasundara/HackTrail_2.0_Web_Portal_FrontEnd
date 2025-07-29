@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Team from "../components/Team";
 import { fetchTeams } from "../api/api";
 
-export default function Home() {
+export default function AdminDashboard() {
     const [teams, setTeams] = useState([]);
 
     useEffect(() => {
@@ -11,7 +11,7 @@ export default function Home() {
                 const data_ = data.map(d => {
                     return {
                         ...d,
-                        admin : false
+                        admin: true
                     }
                 })
                 setTeams(data_)
