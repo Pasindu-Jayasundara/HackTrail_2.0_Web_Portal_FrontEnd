@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 import { getTeam, registerUser } from "../api/api";
 
 export default function RegisterUser() {
-    const id = 7;
-    const [formData, setFormData] = useState({
+    const teamId = 7;
+
+    const [userForm, setUserForm] = useState({
         name: "",
         email: "",
         tg: "",
@@ -12,42 +13,42 @@ export default function RegisterUser() {
         phone_no: ""
     });
 
-    const [empSlots, setEmpSlots] = useState([])
+    const [availableLevels, setAvailableLevels] = useState([]);
 
-    const handleChange = (e) => {
+    useEffect(() => {
+        const allLevels = [0, 1, 2, 3, 4];
+
+        getTeam(teamId)
+            .then(res => {
+                const takenLevels = res.members.map(member => member.level);
+                const openLevels = allLevels.filter(level => !takenLevels.includes(level));
+                setAvailableLevels(openLevels);
+            })
+            .catch(err => console.error(err));
+    }, []);
+
+    const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
+        setUserForm(prev => ({
             ...prev,
             [name]: value
         }));
     };
 
-    useEffect(() => {
-        const arr = [0, 1, 2, 3, 4];
-
-        getTeam(id).then(res => {
-            const levels = res.members.map(mem => mem.level)
-            const emptyLevels = arr.filter(level => !levels.includes(level))
-            setEmpSlots(emptyLevels)
-        }).catch(err => {
-            console.error(err);
-        })
-    }, []);
-
-    const handleSubmit = (e) => {
+    const handleFormSubmit = (e) => {
         e.preventDefault();
 
-        const user = {
-            "team_id": id,
-            ...formData
-        }
+        const newUser = {
+            team_id: teamId,
+            ...userForm
+        };
 
-        registerUser(user).then(res => console.log(res))
-            .catch(err => {
-                console.error(err);
-            });
+        registerUser(newUser)
+            .then(res => console.log(res))
+            .catch(err => console.error(err));
 
-        setFormData({
+        // Reset form after submission
+        setUserForm({
             name: "",
             email: "",
             tg: "",
@@ -60,14 +61,14 @@ export default function RegisterUser() {
     return (
         <main>
             <h2>Individual Registration</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleFormSubmit}>
                 <div>
                     <label>Name:</label>
                     <input
                         type="text"
                         name="name"
-                        value={formData.name}
-                        onChange={handleChange}
+                        value={userForm.name}
+                        onChange={handleInputChange}
                         required
                     />
                 </div>
@@ -76,8 +77,8 @@ export default function RegisterUser() {
                     <input
                         type="email"
                         name="email"
-                        value={formData.email}
-                        onChange={handleChange}
+                        value={userForm.email}
+                        onChange={handleInputChange}
                         required
                     />
                 </div>
@@ -86,8 +87,8 @@ export default function RegisterUser() {
                     <input
                         type="text"
                         name="tg"
-                        value={formData.tg}
-                        onChange={handleChange}
+                        value={userForm.tg}
+                        onChange={handleInputChange}
                         required
                     />
                 </div>
@@ -95,24 +96,22 @@ export default function RegisterUser() {
                     <label>Level:</label>
                     <select
                         name="level"
-                        value={formData.level}
-                        onChange={handleChange}
+                        value={userForm.level}
+                        onChange={handleInputChange}
                         required
                     >
                         <option value="">Select level</option>
-                        {
-                            empSlots.map((level, idx) => {
-                                return <option key={idx} value={level}>{level}</option>
-                            })
-                        }
+                        {availableLevels.map(level => (
+                            <option key={level} value={level}>{level}</option>
+                        ))}
                     </select>
                 </div>
                 <div>
                     <label>Gender:</label>
                     <select
                         name="gender"
-                        value={formData.gender}
-                        onChange={handleChange}
+                        value={userForm.gender}
+                        onChange={handleInputChange}
                         required
                     >
                         <option value="">Select gender</option>
@@ -125,13 +124,13 @@ export default function RegisterUser() {
                     <input
                         type="text"
                         name="phone_no"
-                        value={formData.phone_no}
-                        onChange={handleChange}
+                        value={userForm.phone_no}
+                        onChange={handleInputChange}
                         required
                     />
                 </div>
                 <button type="submit">Add</button>
             </form>
         </main>
-    )
+    );
 }

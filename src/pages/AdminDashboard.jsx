@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Team from "../components/Team";
 import { fetchTeams } from "../api/api";
+import StatsPanel from "../components/StatsPanel";
 
 export default function AdminDashboard() {
     const [teams, setTeams] = useState([]);
@@ -28,6 +29,12 @@ export default function AdminDashboard() {
 
     return (
         <main>
+            <StatsPanel />
+            <div>
+                {/* <a href="">Delete All</a> */}
+                <a href="">Download Excel</a>
+                {/* <a href="">Users</a> */}
+            </div>
             {teams.length > 0 ? Teams : <p>Loading team data...</p>}
         </main>
     );

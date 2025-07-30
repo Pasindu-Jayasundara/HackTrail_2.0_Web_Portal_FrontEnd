@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { registerTeam, fetchTeams } from "../api/api";
+import { useState, useEffect } from "react";
+import { getTeam } from "../api/api";
 
-export default function RegisterTeam() {
+export default function UpdateTeam() {
+    const teamId = 1;
+
     const [members, setMembers] = useState([]);
-    const [registeredTeamIds, setRegisteredTeamIds] = useState([]);
-
     const [memberForm, setMemberForm] = useState({
         name: "",
         email: "",
@@ -15,14 +15,9 @@ export default function RegisterTeam() {
     });
 
     useEffect(() => {
-        fetchTeams()
-            .then(data => {
-                const teamIds = data.map(team => team.team_id_);
-                setRegisteredTeamIds(teamIds);
-            })
-            .catch(err => {
-                console.error(err);
-            });
+        getTeam(teamId)
+            .then(team => setMembers(team.members))
+            .catch(err => console.error(err));
     }, []);
 
     const handleFormChange = (e) => {
@@ -31,6 +26,16 @@ export default function RegisterTeam() {
             ...prev,
             [name]: value
         }));
+    };
+
+    const handleEditMember = (index) => {
+        const memberToEdit = members[index];
+        setMemberForm(memberToEdit);
+        setMembers(prev => prev.filter((_, i) => i !== index));
+    };
+
+    const handleDeleteMember = (index) => {
+        setMembers(prev => prev.filter((_, i) => i !== index));
     };
 
     const handleAddMember = (e) => {
@@ -46,39 +51,14 @@ export default function RegisterTeam() {
         });
     };
 
-    const handleEditMember = (index) => {
-        const selectedMember = members[index];
-        setMemberForm(selectedMember);
-        setMembers(prev => prev.filter((_, i) => i !== index)); // remove to avoid duplicate
-    };
-
-    const handleDeleteMember = (index) => {
-        setMembers(prev => prev.filter((_, i) => i !== index));
-    };
-
-    const handleRegisterTeam = () => {
-        const team = {
-            team_id: generateTeamId(),
-            members: members
-        };
-
-        registerTeam(team)
-            .then(res => console.log(res))
-            .catch(err => {
-                console.error(err);
-            });
-    };
-
-    const generateTeamId = () => {
-        const allPossibleIds = Array.from({ length: 15 }, (_, i) => i + 1); // [1...15]
-        const availableIds = allPossibleIds.filter(id => !registeredTeamIds.includes(id));
-        const randomIndex = Math.floor(Math.random() * availableIds.length);
-        return availableIds[randomIndex];
+    const handleUpdateTeam = () => {
+        // Send updated team data to API here
+        console.log("Final team to update:", members);
     };
 
     return (
         <main>
-            <h2>Team Registration</h2>
+            <h2>Update Team</h2>
 
             <form onSubmit={handleAddMember}>
                 <div>
@@ -183,8 +163,8 @@ export default function RegisterTeam() {
                 </table>
             )}
 
-            <button type="button" onClick={handleRegisterTeam} style={{ marginTop: '20px' }}>
-                Register Team
+            <button type="button" onClick={handleUpdateTeam} style={{ marginTop: '20px' }}>
+                Update Team
             </button>
         </main>
     );
