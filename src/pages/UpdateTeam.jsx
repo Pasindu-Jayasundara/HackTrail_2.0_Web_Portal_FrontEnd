@@ -53,7 +53,6 @@ export default function UpdateTeam() {
 
     const handleUpdateTeam = () => {
         const team = {
-            team_id: teamId,
             members: members
         };
 
