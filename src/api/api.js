@@ -41,3 +41,15 @@ export const registerUser = async (user) => {
     throw err;
   }
 };
+
+export const updateTeam = async (id, team) => {
+  try {
+    const res = await axios.put(`${BASE_URL}/teams/${id}`, team);
+    return res.data;
+  } catch (err) {
+    console.error("Error Registering User", err.message);
+    throw err;
+  }
+};
+
+
