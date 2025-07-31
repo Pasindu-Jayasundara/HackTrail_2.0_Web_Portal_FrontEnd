@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/AuthContext';
+
 
 export default function AdminLogin() {
     const [formData, setFormData] = useState({
         username: "",
         password: ""
     })
+    const navigate = useNavigate()
+    const { setIsAuthenticated } = useAuth()
 
 
     const handleChange = (e) => {
@@ -13,11 +18,14 @@ export default function AdminLogin() {
             ...prev,
             [name]: value
         }));
-
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle login logic here
+        if (formData.username == "admin" && formData.password == "admin") {
+            setIsAuthenticated(true)
+            localStorage.setItem("auth", true);
+            navigate("/dashboard");
+        }
     };
 
     return (
@@ -29,11 +37,12 @@ export default function AdminLogin() {
                         Username:
                         <input
                             type="text"
+                            name="username"
                             value={formData.username}
                             onChange={handleChange}
                             style={{ width: '100%', padding: 8, marginTop: 4 }}
                             required
-                        />
+                            />
                     </label>
                 </div>
                 <div style={{ marginBottom: 16 }}>
@@ -41,6 +50,7 @@ export default function AdminLogin() {
                         Password:
                         <input
                             type="password"
+                            name="password"
                             value={formData.password}
                             onChange={handleChange}
                             style={{ width: '100%', padding: 8, marginTop: 4 }}

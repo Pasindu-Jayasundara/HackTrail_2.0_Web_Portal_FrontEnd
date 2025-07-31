@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { getTeam, registerUser } from "../api/api";
+import { useParams } from 'react-router-dom';
+import Team from "../components/Team";
+
 
 export default function RegisterUser() {
-    const teamId = 7;
+    let {id: teamId} = useParams();
 
     const [userForm, setUserForm] = useState({
         name: "",
@@ -14,6 +17,10 @@ export default function RegisterUser() {
     });
 
     const [availableLevels, setAvailableLevels] = useState([]);
+    const [team, setTeam] = useState({
+        team_id : null,
+        members: []
+    })
 
     useEffect(() => {
         const allLevels = [0, 1, 2, 3, 4];
@@ -23,6 +30,7 @@ export default function RegisterUser() {
                 const takenLevels = res.members.map(member => member.level);
                 const openLevels = allLevels.filter(level => !takenLevels.includes(level));
                 setAvailableLevels(openLevels);
+                setTeam(res);
             })
             .catch(err => console.error(err));
     }, []);
@@ -131,6 +139,7 @@ export default function RegisterUser() {
                 </div>
                 <button type="submit">Add</button>
             </form>
+            <Team {...team}/>
         </main>
     );
 }

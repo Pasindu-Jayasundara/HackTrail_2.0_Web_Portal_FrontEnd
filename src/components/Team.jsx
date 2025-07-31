@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Team(props) {
+    const navigate = useNavigate();
     const [leader, setLeader] = useState(null);
     const [empSlots, setEmpSlots] = useState([])
 
@@ -38,12 +40,16 @@ export default function Team(props) {
         </tr>
     ));
 
+    const applyTeam = () => {
+        navigate(`/reg/user/${props.team_id}`);
+    }
+
     return (
         <div>
             <h2>Team {props.team_id}</h2>
-            {empSlots.length > 0 && !props.admin && <a href="">Apply</a>}
-            {props.admin && <a href="">Edit</a>}
-            {props.admin && <a href="">Delete</a>}
+            {empSlots.length > 0 && !props.admin && <button onClick={applyTeam} >Apply</button>}
+            {props.admin && <button >Edit</button>}
+            {props.admin && <button >Delete</button>}
             <table>
                 <thead>
                     <tr>
