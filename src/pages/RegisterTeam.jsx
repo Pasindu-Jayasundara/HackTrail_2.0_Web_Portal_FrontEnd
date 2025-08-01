@@ -98,15 +98,15 @@ export default function RegisterTeam() {
     const handleRegisterTeam = () => {
         if (members.length > 2) {
             const team = {
-            team_id: generateTeamId(),
-            members: members
-        };
+                team_id: generateTeamId(),
+                members: members
+            };
 
-        registerTeam(team)
-            .then(res => console.log(res))
-            .catch(err => {
-                console.error(err);
-            });
+            registerTeam(team)
+                .then(res => console.log(res))
+                .catch(err => {
+                    console.error(err);
+                });
         }
     };
 

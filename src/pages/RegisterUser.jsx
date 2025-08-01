@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import { getTeam, registerUser } from "../api/api";
 import { useParams } from 'react-router-dom';
-validateLoginForm
 import Team from "../components/Team";
-import { validateLoginForm } from "../utils/validation";
+import { validateForm } from "../utils/validation";
 
 
 export default function RegisterUser() {
-    let {id: teamId} = useParams();
+    let { id: teamId } = useParams();
 
     const [userForm, setUserForm] = useState({
         name: "",
@@ -18,12 +17,16 @@ export default function RegisterUser() {
         phone_no: ""
     });
 
-    const [availableLevels, setAvailableLevels] = useState([]);
-    const [team, setTeam] = useState({
-        team_id : null,
-        members: []
+    const [errors, setErrors] = useState({
+        name: "",
+        email: "",
+        tg: "",
+        level: "",
+        gender: "",
+        phone_no: ""
     })
 
+    const [availableLevels, setAvailableLevels] = useState([]);
     useEffect(() => {
         const allLevels = [0, 1, 2, 3, 4];
 
@@ -32,7 +35,6 @@ export default function RegisterUser() {
                 const takenLevels = res.members.map(member => member.level);
                 const openLevels = allLevels.filter(level => !takenLevels.includes(level));
                 setAvailableLevels(openLevels);
-                setTeam(res);
             })
             .catch(err => console.error(err));
     }, []);
@@ -47,25 +49,37 @@ export default function RegisterUser() {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
+        const validationErrors = validateForm(userForm);
+        setErrors(validationErrors);
 
-        const newUser = {
-            team_id: teamId,
-            ...userForm
-        };
+        if (Object.keys(validationErrors).length === 0) {
+            const newUser = {
+                team_id: teamId,
+                ...userForm
+            };
 
-        registerUser(newUser)
-            .then(res => console.log(res))
-            .catch(err => console.error(err));
+            registerUser(newUser)
+                .then(res => console.log(res))
+                .catch(err => console.error(err));
 
-        // Reset form after submission
-        setUserForm({
-            name: "",
-            email: "",
-            tg: "",
-            level: "",
-            gender: "",
-            phone_no: ""
-        });
+            setUserForm({
+                name: "",
+                email: "",
+                tg: "",
+                level: "",
+                gender: "",
+                phone_no: ""
+            });
+
+            setErrors({
+                name: "",
+                email: "",
+                tg: "",
+                level: "",
+                gender: "",
+                phone_no: ""
+            });
+        }
     };
 
     return (
@@ -81,6 +95,7 @@ export default function RegisterUser() {
                         onChange={handleInputChange}
                         required
                     />
+                    {errors.name !== "" && <p>{errors.name}</p>}
                 </div>
                 <div>
                     <label>Email:</label>
@@ -91,6 +106,7 @@ export default function RegisterUser() {
                         onChange={handleInputChange}
                         required
                     />
+                    {errors.email !== "" && <p>{errors.email}</p>}
                 </div>
                 <div>
                     <label>TG Number:</label>
@@ -101,6 +117,7 @@ export default function RegisterUser() {
                         onChange={handleInputChange}
                         required
                     />
+                    {errors.tg !== "" && <p>{errors.tg}</p>}
                 </div>
                 <div>
                     <label>Level:</label>
@@ -115,6 +132,7 @@ export default function RegisterUser() {
                             <option key={level} value={level}>{level}</option>
                         ))}
                     </select>
+                    {errors.level !== "" && <p>{errors.level}</p>}
                 </div>
                 <div>
                     <label>Gender:</label>
@@ -128,6 +146,7 @@ export default function RegisterUser() {
                         <option value="M">Male</option>
                         <option value="F">Female</option>
                     </select>
+                    {errors.gender !== "" && <p>{errors.gender}</p>}
                 </div>
                 <div>
                     <label>Phone Number:</label>
@@ -138,10 +157,10 @@ export default function RegisterUser() {
                         onChange={handleInputChange}
                         required
                     />
+                    {errors.phone_no !== "" && <p>{errors.phone_no}</p>}
                 </div>
                 <button type="submit">Add</button>
             </form>
-            <Team {...team}/>
         </main>
     );
 }
