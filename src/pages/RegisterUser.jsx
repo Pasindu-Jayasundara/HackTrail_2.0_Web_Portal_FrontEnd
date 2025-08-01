@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { getTeam, registerUser } from "../api/api";
 import { useParams } from 'react-router-dom';
+validateLoginForm
 import Team from "../components/Team";
+import { validateLoginForm } from "../utils/validation";
 
 
 export default function RegisterUser() {

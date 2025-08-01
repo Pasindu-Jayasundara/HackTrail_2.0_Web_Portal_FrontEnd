@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { registerTeam, fetchTeams } from "../api/api";
+import { validateForm } from "../utils/validation";
 
 export default function RegisterTeam() {
     const [members, setMembers] = useState([]);
     const [registeredTeamIds, setRegisteredTeamIds] = useState([]);
+    const [availableLevels, setAvailableLevels] = useState([])
 
     const [memberForm, setMemberForm] = useState({
         name: "",
@@ -14,16 +16,38 @@ export default function RegisterTeam() {
         phone_no: ""
     });
 
+    const [errors, setErrors] = useState({
+        name: "",
+        email: "",
+        tg: "",
+        level: "",
+        gender: "",
+        phone_no: ""
+    })
+
+
+    const updateLevels = () => {
+        const allLevels = [0, 1, 2, 3, 4];
+        const takenLevels = members.map(member => parseInt(member.level));
+        const openLevels = allLevels.filter(level => !takenLevels.includes(level));
+        setAvailableLevels(openLevels);
+    }
+
     useEffect(() => {
         fetchTeams()
             .then(data => {
                 const teamIds = data.map(team => team.team_id_);
                 setRegisteredTeamIds(teamIds);
+                setAvailableLevels([0, 1, 2, 3, 4])
             })
             .catch(err => {
                 console.error(err);
             });
     }, []);
+
+    useEffect(() => {
+        updateLevels();
+    }, [members])
 
     const handleFormChange = (e) => {
         const { name, value } = e.target;
@@ -32,24 +56,39 @@ export default function RegisterTeam() {
             [name]: value
         }));
     };
-
     const handleAddMember = (e) => {
         e.preventDefault();
-        setMembers(prev => [...prev, memberForm]);
-        setMemberForm({
-            name: "",
-            email: "",
-            tg: "",
-            level: "",
-            gender: "",
-            phone_no: ""
-        });
+        const validationErrors = validateForm(memberForm);
+        console.log(validationErrors);
+        setErrors(validationErrors);
+
+        // Only proceed if there are no errors
+        if (Object.keys(validationErrors).length === 0) {
+            setMembers(prev => [...prev, memberForm]);
+            setMemberForm({
+                name: "",
+                email: "",
+                tg: "",
+                level: "",
+                gender: "",
+                phone_no: ""
+            });
+
+            setErrors({
+                name: "",
+                email: "",
+                tg: "",
+                level: "",
+                gender: "",
+                phone_no: ""
+            });
+        }
     };
 
     const handleEditMember = (index) => {
         const selectedMember = members[index];
         setMemberForm(selectedMember);
-        setMembers(prev => prev.filter((_, i) => i !== index)); // remove to avoid duplicate
+        setMembers(prev => prev.filter((_, i) => i !== index));
     };
 
     const handleDeleteMember = (index) => {
@@ -57,7 +96,8 @@ export default function RegisterTeam() {
     };
 
     const handleRegisterTeam = () => {
-        const team = {
+        if (members.length > 2) {
+            const team = {
             team_id: generateTeamId(),
             members: members
         };
@@ -67,6 +107,7 @@ export default function RegisterTeam() {
             .catch(err => {
                 console.error(err);
             });
+        }
     };
 
     const generateTeamId = () => {
@@ -90,6 +131,7 @@ export default function RegisterTeam() {
                         onChange={handleFormChange}
                         required
                     />
+                    {errors.name !== "" && <p>{errors.name}</p>}
                 </div>
                 <div>
                     <label>Email:</label>
@@ -100,6 +142,7 @@ export default function RegisterTeam() {
                         onChange={handleFormChange}
                         required
                     />
+                    {errors.email !== "" && <p>{errors.email}</p>}
                 </div>
                 <div>
                     <label>TG Number:</label>
@@ -110,6 +153,7 @@ export default function RegisterTeam() {
                         onChange={handleFormChange}
                         required
                     />
+                    {errors.tg !== "" && <p>{errors.tg}</p>}
                 </div>
                 <div>
                     <label>Level:</label>
@@ -120,10 +164,11 @@ export default function RegisterTeam() {
                         required
                     >
                         <option value="">Select level</option>
-                        {[0, 1, 2, 3, 4].map(level => (
+                        {availableLevels.map(level => (
                             <option key={level} value={level}>{level}</option>
                         ))}
                     </select>
+                    {errors.level !== "" && <p>{errors.level}</p>}
                 </div>
                 <div>
                     <label>Gender:</label>
@@ -137,6 +182,7 @@ export default function RegisterTeam() {
                         <option value="M">Male</option>
                         <option value="F">Female</option>
                     </select>
+                    {errors.gender !== "" && <p>{errors.gender}</p>}
                 </div>
                 <div>
                     <label>Phone Number:</label>
@@ -147,6 +193,7 @@ export default function RegisterTeam() {
                         onChange={handleFormChange}
                         required
                     />
+                    {errors.phone_no !== "" && <p>{errors.phone_no}</p>}
                 </div>
                 <button type="submit">Add Member</button>
             </form>
@@ -182,8 +229,8 @@ export default function RegisterTeam() {
                     </tbody>
                 </table>
             )}
-
-            <button type="button" onClick={handleRegisterTeam} style={{ marginTop: '20px' }}>
+            {members.length < 3 && <p>Minimum Of 3 Members are needed</p>}
+            <button disabled={members.length < 3} type="button" onClick={handleRegisterTeam} style={{ marginTop: '20px' }}>
                 Register Team
             </button>
         </main>

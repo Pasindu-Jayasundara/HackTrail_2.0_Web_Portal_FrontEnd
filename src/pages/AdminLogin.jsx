@@ -1,13 +1,19 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthContext';
-
+import { validateLoginForm } from '../utils/validation';
 
 export default function AdminLogin() {
     const [formData, setFormData] = useState({
         username: "",
         password: ""
     })
+    
+    const [errors, setErrors] = useState({
+        username: "",
+        password: ""
+    })
+
     const navigate = useNavigate()
     const { setIsAuthenticated } = useAuth()
 
@@ -21,7 +27,15 @@ export default function AdminLogin() {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (formData.username == "admin" && formData.password == "admin") {
+        const validationErrors = validateLoginForm(formData);
+        setErrors(validationErrors);
+
+        if (Object.keys(validationErrors).length === 0) {
+            setErrors({
+                username: "",
+                password: ""
+            })
+
             setIsAuthenticated(true)
             localStorage.setItem("auth", true);
             navigate("/dashboard");
@@ -42,8 +56,9 @@ export default function AdminLogin() {
                             onChange={handleChange}
                             style={{ width: '100%', padding: 8, marginTop: 4 }}
                             required
-                            />
+                        />
                     </label>
+                    {errors.username != "" && <p>{errors.username}</p>}
                 </div>
                 <div style={{ marginBottom: 16 }}>
                     <label>
@@ -57,6 +72,7 @@ export default function AdminLogin() {
                             required
                         />
                     </label>
+                    {errors.password != "" && <p>{errors.password}</p>}
                 </div>
                 <button type="submit" style={{ width: '100%', padding: 10 }}>Login</button>
             </form>
