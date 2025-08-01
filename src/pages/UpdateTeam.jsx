@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { getTeam, updateTeam } from "../api/api";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { validateForm } from "../utils/validation";
 
 export default function UpdateTeam() {
     let { id: teamId } = useParams();
+    const navigate = useNavigate();
 
     const [availableLevels, setAvailableLevels] = useState([])
     const [members, setMembers] = useState([]);
@@ -116,10 +117,14 @@ export default function UpdateTeam() {
             });
     };
 
+    const toDashboard = () => {
+        navigate('/dashboard');
+    }
+
     return (
         <main>
+            <button onClick={toDashboard}>Back</button>
             <h2>Update Team</h2>
-
             <form onSubmit={handleAddMember}>
                 <div>
                     <label>Name:</label>

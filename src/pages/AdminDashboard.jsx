@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Team from "../components/Team";
-import { fetchTeams } from "../api/api";
+import { fetchTeams, jsonToExcel } from "../api/api";
 import StatsPanel from "../components/StatsPanel";
 
 export default function AdminDashboard() {
@@ -31,9 +31,7 @@ export default function AdminDashboard() {
         <main>
             <StatsPanel />
             <div>
-                {/* <a href="">Delete All</a> */}
-                <a href="">Download Excel</a>
-                {/* <a href="">Users</a> */}
+                <button onClick={jsonToExcel}>Download Excel</button>
             </div>
             {teams.length > 0 ? Teams : <p>Loading team data...</p>}
         </main>

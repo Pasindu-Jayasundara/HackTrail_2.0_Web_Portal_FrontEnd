@@ -30,7 +30,7 @@ export default function App() {
           <Route path='teams' element={<Teams />} /></>)}
         <Route element={<ProtectedRoute />}>
           <Route path='dashboard' element={<AdminDashboard />} />
-          <Route path='update/:id' element={<UpdateTeam />} />
+          <Route path='update_team/:id' element={<UpdateTeam />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>

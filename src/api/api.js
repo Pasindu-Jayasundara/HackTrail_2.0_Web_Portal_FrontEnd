@@ -1,3 +1,4 @@
+import * as XLSX from "xlsx";
 import axios from "axios";
 
 const BASE_URL = "http://localhost:5000";
@@ -52,4 +53,32 @@ export const updateTeam = async (id, team) => {
   }
 };
 
+export const deleteTeam = async (id) => {
+  try {
+    const res = await axios.delete(`${BASE_URL}/teams/${id}`);
+    return res.data;
+  } catch (err) {
+    console.error("Error Registering User", err.message);
+    throw err;
+  }
+};
 
+export const jsonToExcel = async () => {
+  try {
+    const res = await axios.get(`${BASE_URL}/users`);
+    const jsonData = res.data.map(user => {
+      const {_id, ...rest} = user;
+      return rest;
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(jsonData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    XLSX.writeFile(workbook, "teams.xlsx");
+
+    console.log("Excel file downloaded successfully");
+  } catch (err) {
+    console.error("Error fetching JSON data:", err.message);
+  }
+};
