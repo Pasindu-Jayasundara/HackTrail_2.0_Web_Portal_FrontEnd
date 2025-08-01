@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import { getTeam, updateTeam } from "../api/api";
 import { useParams } from "react-router-dom";
+import { validateForm } from "../utils/validation";
 
 export default function UpdateTeam() {
     let { id: teamId } = useParams();
 
+    const [availableLevels, setAvailableLevels] = useState([])
     const [members, setMembers] = useState([]);
+    const [editingIndex, setEditingIndex] = useState(null);
     const [memberForm, setMemberForm] = useState({
         name: "",
         email: "",
@@ -15,11 +18,35 @@ export default function UpdateTeam() {
         phone_no: ""
     });
 
+    const [errors, setErrors] = useState({
+        name: "",
+        email: "",
+        tg: "",
+        level: "",
+        gender: "",
+        phone_no: ""
+    })
+
+    const updateLevels = () => {
+        const allLevels = [0, 1, 2, 3, 4];
+        const takenLevels = members.map(member => parseInt(member.level));
+        const openLevels = allLevels.filter(level => !takenLevels.includes(level));
+        setAvailableLevels(openLevels);
+    }
+
     useEffect(() => {
         getTeam(teamId)
-            .then(team => setMembers(team.members))
+            .then(team => {
+                setMembers(team.members);
+                setAvailableLevels([0, 1, 2, 3, 4]);
+            })
             .catch(err => console.error(err));
     }, []);
+
+    useEffect(() => {
+        updateLevels();
+    }, [members])
+
 
     const handleFormChange = (e) => {
         const { name, value } = e.target;
@@ -32,7 +59,11 @@ export default function UpdateTeam() {
     const handleEditMember = (index) => {
         const memberToEdit = members[index];
         setMemberForm(memberToEdit);
-        setMembers(prev => prev.filter((_, i) => i !== index));
+        setEditingIndex(index);
+        setAvailableLevels([
+            ...availableLevels,
+            memberToEdit.level
+        ]);
     };
 
     const handleDeleteMember = (index) => {
@@ -41,15 +72,36 @@ export default function UpdateTeam() {
 
     const handleAddMember = (e) => {
         e.preventDefault();
-        setMembers(prev => [...prev, memberForm]);
-        setMemberForm({
-            name: "",
-            email: "",
-            tg: "",
-            level: "",
-            gender: "",
-            phone_no: ""
-        });
+        const validationErrors = validateForm(memberForm);
+        setErrors(validationErrors);
+
+        if (Object.keys(validationErrors).length === 0) {
+            if (editingIndex !== null) {
+                setMembers(prev => prev.map((m, i) => i === editingIndex ? memberForm : m));
+            } else {
+                setMembers(prev => [...prev, memberForm]);
+            }
+
+            setMemberForm({
+                name: "",
+                email: "",
+                tg: "",
+                level: "",
+                gender: "",
+                phone_no: ""
+            });
+
+            setErrors({
+                name: "",
+                email: "",
+                tg: "",
+                level: "",
+                gender: "",
+                phone_no: ""
+            });
+        }
+
+        setEditingIndex(null);
     };
 
     const handleUpdateTeam = () => {
@@ -78,6 +130,7 @@ export default function UpdateTeam() {
                         onChange={handleFormChange}
                         required
                     />
+                    {errors.name !== "" && <p>{errors.name}</p>}
                 </div>
                 <div>
                     <label>Email:</label>
@@ -88,6 +141,7 @@ export default function UpdateTeam() {
                         onChange={handleFormChange}
                         required
                     />
+                    {errors.email !== "" && <p>{errors.email}</p>}
                 </div>
                 <div>
                     <label>TG Number:</label>
@@ -98,6 +152,7 @@ export default function UpdateTeam() {
                         onChange={handleFormChange}
                         required
                     />
+                    {errors.tg !== "" && <p>{errors.tg}</p>}
                 </div>
                 <div>
                     <label>Level:</label>
@@ -108,10 +163,11 @@ export default function UpdateTeam() {
                         required
                     >
                         <option value="">Select level</option>
-                        {[0, 1, 2, 3, 4].map(level => (
+                        {availableLevels.map(level => (
                             <option key={level} value={level}>{level}</option>
                         ))}
                     </select>
+                    {errors.level !== "" && <p>{errors.level}</p>}
                 </div>
                 <div>
                     <label>Gender:</label>
@@ -125,6 +181,7 @@ export default function UpdateTeam() {
                         <option value="M">Male</option>
                         <option value="F">Female</option>
                     </select>
+                    {errors.gender !== "" && <p>{errors.gender}</p>}
                 </div>
                 <div>
                     <label>Phone Number:</label>
@@ -135,8 +192,9 @@ export default function UpdateTeam() {
                         onChange={handleFormChange}
                         required
                     />
+                    {errors.phone_no !== "" && <p>{errors.phone_no}</p>}
                 </div>
-                <button type="submit">Add Member</button>
+                <button type="submit">{editingIndex !== null ? "Update Member" : "Add Member"}</button>
             </form>
 
             {members.length > 0 && (

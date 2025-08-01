@@ -43,11 +43,11 @@ const validateForm = (form) => {
     err.tg = "Enter a valid tg number";
   }
 
-  if (form.level.trim() === "") {
+  if (!form.level || form.level === "") {
     err.level = "This field is required";
   }
 
-  if (form.gender.trim() === "") {
+  if (!form.gender || form.gender === "") {
     err.level = "This field is required";
   }
 

@@ -6,6 +6,7 @@ export default function RegisterTeam() {
     const [members, setMembers] = useState([]);
     const [registeredTeamIds, setRegisteredTeamIds] = useState([]);
     const [availableLevels, setAvailableLevels] = useState([])
+    const [editingIndex, setEditingIndex] = useState(null);
 
     const [memberForm, setMemberForm] = useState({
         name: "",
@@ -24,7 +25,6 @@ export default function RegisterTeam() {
         gender: "",
         phone_no: ""
     })
-
 
     const updateLevels = () => {
         const allLevels = [0, 1, 2, 3, 4];
@@ -59,12 +59,15 @@ export default function RegisterTeam() {
     const handleAddMember = (e) => {
         e.preventDefault();
         const validationErrors = validateForm(memberForm);
-        console.log(validationErrors);
         setErrors(validationErrors);
 
-        // Only proceed if there are no errors
         if (Object.keys(validationErrors).length === 0) {
-            setMembers(prev => [...prev, memberForm]);
+            if (editingIndex !== null) {
+                setMembers(prev => prev.map((m, i) => i === editingIndex ? memberForm : m));
+            } else {
+                setMembers(prev => [...prev, memberForm]);
+            }
+            
             setMemberForm({
                 name: "",
                 email: "",
@@ -82,13 +85,19 @@ export default function RegisterTeam() {
                 gender: "",
                 phone_no: ""
             });
+
+            setEditingIndex(null)
         }
     };
 
     const handleEditMember = (index) => {
-        const selectedMember = members[index];
-        setMemberForm(selectedMember);
-        setMembers(prev => prev.filter((_, i) => i !== index));
+        const memberToEdit = members[index];
+        setMemberForm(memberToEdit);
+        setEditingIndex(index);
+        setAvailableLevels([
+            ...availableLevels,
+            memberToEdit.level
+        ]);
     };
 
     const handleDeleteMember = (index) => {
@@ -111,7 +120,7 @@ export default function RegisterTeam() {
     };
 
     const generateTeamId = () => {
-        const allPossibleIds = Array.from({ length: 15 }, (_, i) => i + 1); // [1...15]
+        const allPossibleIds = Array.from({ length: 15 }, (_, i) => i + 1);
         const availableIds = allPossibleIds.filter(id => !registeredTeamIds.includes(id));
         const randomIndex = Math.floor(Math.random() * availableIds.length);
         return availableIds[randomIndex];
@@ -121,82 +130,84 @@ export default function RegisterTeam() {
         <main>
             <h2>Team Registration</h2>
 
-            <form onSubmit={handleAddMember}>
-                <div>
-                    <label>Name:</label>
-                    <input
-                        type="text"
-                        name="name"
-                        value={memberForm.name}
-                        onChange={handleFormChange}
-                        required
-                    />
-                    {errors.name !== "" && <p>{errors.name}</p>}
-                </div>
-                <div>
-                    <label>Email:</label>
-                    <input
-                        type="email"
-                        name="email"
-                        value={memberForm.email}
-                        onChange={handleFormChange}
-                        required
-                    />
-                    {errors.email !== "" && <p>{errors.email}</p>}
-                </div>
-                <div>
-                    <label>TG Number:</label>
-                    <input
-                        type="text"
-                        name="tg"
-                        value={memberForm.tg}
-                        onChange={handleFormChange}
-                        required
-                    />
-                    {errors.tg !== "" && <p>{errors.tg}</p>}
-                </div>
-                <div>
-                    <label>Level:</label>
-                    <select
-                        name="level"
-                        value={memberForm.level}
-                        onChange={handleFormChange}
-                        required
-                    >
-                        <option value="">Select level</option>
-                        {availableLevels.map(level => (
-                            <option key={level} value={level}>{level}</option>
-                        ))}
-                    </select>
-                    {errors.level !== "" && <p>{errors.level}</p>}
-                </div>
-                <div>
-                    <label>Gender:</label>
-                    <select
-                        name="gender"
-                        value={memberForm.gender}
-                        onChange={handleFormChange}
-                        required
-                    >
-                        <option value="">Select gender</option>
-                        <option value="M">Male</option>
-                        <option value="F">Female</option>
-                    </select>
-                    {errors.gender !== "" && <p>{errors.gender}</p>}
-                </div>
-                <div>
-                    <label>Phone Number:</label>
-                    <input
-                        type="text"
-                        name="phone_no"
-                        value={memberForm.phone_no}
-                        onChange={handleFormChange}
-                        required
-                    />
-                    {errors.phone_no !== "" && <p>{errors.phone_no}</p>}
-                </div>
-                <button type="submit">Add Member</button>
-            </form>
+            {registeredTeamIds.length < 15 ? (
+                <form onSubmit={handleAddMember}>
+                    <div>
+                        <label>Name:</label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={memberForm.name}
+                            onChange={handleFormChange}
+                            required
+                        />
+                        {errors.name !== "" && <p>{errors.name}</p>}
+                    </div>
+                    <div>
+                        <label>Email:</label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={memberForm.email}
+                            onChange={handleFormChange}
+                            required
+                        />
+                        {errors.email !== "" && <p>{errors.email}</p>}
+                    </div>
+                    <div>
+                        <label>TG Number:</label>
+                        <input
+                            type="text"
+                            name="tg"
+                            value={memberForm.tg}
+                            onChange={handleFormChange}
+                            required
+                        />
+                        {errors.tg !== "" && <p>{errors.tg}</p>}
+                    </div>
+                    <div>
+                        <label>Level:</label>
+                        <select
+                            name="level"
+                            value={memberForm.level}
+                            onChange={handleFormChange}
+                            required
+                        >
+                            <option value="">Select level</option>
+                            {availableLevels.map(level => (
+                                <option key={level} value={level}>{level}</option>
+                            ))}
+                        </select>
+                        {errors.level !== "" && <p>{errors.level}</p>}
+                    </div>
+                    <div>
+                        <label>Gender:</label>
+                        <select
+                            name="gender"
+                            value={memberForm.gender}
+                            onChange={handleFormChange}
+                            required
+                        >
+                            <option value="">Select gender</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                        </select>
+                        {errors.gender !== "" && <p>{errors.gender}</p>}
+                    </div>
+                    <div>
+                        <label>Phone Number:</label>
+                        <input
+                            type="text"
+                            name="phone_no"
+                            value={memberForm.phone_no}
+                            onChange={handleFormChange}
+                            required
+                        />
+                        {errors.phone_no !== "" && <p>{errors.phone_no}</p>}
+                    </div>
+                    <button type="submit">{editingIndex !== null ? "Update Member" : "Add Member"}</button>
+                </form>
+            ) : <p>Registration is Full</p>}
 
             {members.length > 0 && (
                 <table border="1" cellPadding="8" cellSpacing="0" style={{ marginTop: '20px' }}>

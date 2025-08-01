@@ -7,7 +7,8 @@ import { validateForm } from "../utils/validation";
 
 export default function RegisterUser() {
     let { id: teamId } = useParams();
-
+    
+    const [availableLevels, setAvailableLevels] = useState([]);
     const [userForm, setUserForm] = useState({
         name: "",
         email: "",
@@ -26,7 +27,7 @@ export default function RegisterUser() {
         phone_no: ""
     })
 
-    const [availableLevels, setAvailableLevels] = useState([]);
+
     useEffect(() => {
         const allLevels = [0, 1, 2, 3, 4];
 
