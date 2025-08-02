@@ -1,21 +1,9 @@
 import * as XLSX from "xlsx";
-import axios from "axios";
-
-const BASE_URL = "http://localhost:5000";
-
-export const fetchTeams = async () => {
-  try {
-    const res = await axios.get(`${BASE_URL}/teams`);
-    return res.data;
-  } catch (err) {
-    console.error("Error fetching JSON data:", err.message);
-    throw err;
-  }
-};
+import axios from "../utils/axios";
 
 export const registerTeam = async (team) => {
   try {
-    const res = await axios.post(`${BASE_URL}/registration/team`, team);
+    const res = await axios.post(`/registration/team`, team);
     return res.data;
   } catch (err) {
     console.error("Error Registering Team", err.message);
@@ -23,19 +11,9 @@ export const registerTeam = async (team) => {
   }
 };
 
-export const getTeam = async (id) => {
-  try {
-    const res = await axios.get(`${BASE_URL}/teams/${id}`);
-    return res.data;
-  } catch (err) {
-    console.error("Error fetching JSON data:", err.message);
-    throw err;
-  }
-};
-
 export const registerUser = async (user) => {
   try {
-    const res = await axios.post(`${BASE_URL}/registration/user`, user);
+    const res = await axios.post(`/registration/user`, user);
     return res.data;
   } catch (err) {
     console.error("Error Registering User", err.message);
@@ -43,9 +21,29 @@ export const registerUser = async (user) => {
   }
 };
 
+export const fetchTeams = async () => {
+  try {
+    const res = await axios.get(`/teams`);
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching JSON data:", err.message);
+    throw err;
+  }
+};
+
+export const getTeam = async (id) => {
+  try {
+    const res = await axios.get(`/teams/${id}`);
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching JSON data:", err.message);
+    throw err;
+  }
+};
+
 export const updateTeam = async (id, team) => {
   try {
-    const res = await axios.put(`${BASE_URL}/teams/${id}`, team);
+    const res = await axios.put(`/teams/${id}`, team);
     return res.data;
   } catch (err) {
     console.error("Error Registering User", err.message);
@@ -55,7 +53,7 @@ export const updateTeam = async (id, team) => {
 
 export const deleteTeam = async (id) => {
   try {
-    const res = await axios.delete(`${BASE_URL}/teams/${id}`);
+    const res = await axios.delete(`/teams/${id}`);
     return res.data;
   } catch (err) {
     console.error("Error Registering User", err.message);
@@ -65,7 +63,7 @@ export const deleteTeam = async (id) => {
 
 export const jsonToExcel = async () => {
   try {
-    const res = await axios.get(`${BASE_URL}/users`);
+    const res = await axios.get(`/users`);
     const jsonData = res.data.map(user => {
       const {_id, ...rest} = user;
       return rest;
