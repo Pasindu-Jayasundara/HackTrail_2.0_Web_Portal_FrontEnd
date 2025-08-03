@@ -38,7 +38,9 @@ export default function App() {
   )
 
   return (
-    <RouterProvider router={router} />
+    <div className="max-w-7xl w-11/12 mx-auto">
+      <RouterProvider router={router} />
+    </div>
   )
 
 }

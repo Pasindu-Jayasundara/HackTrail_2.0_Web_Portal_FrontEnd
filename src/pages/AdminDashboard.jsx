@@ -28,12 +28,12 @@ export default function AdminDashboard() {
     );
 
     return (
-        <main>
+        <div className="my-20 ">
             <StatsPanel />
-            <div>
-                <button onClick={jsonToExcel}>Download Excel</button>
+            <button className="text-center px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition cursor-pointer" onClick={jsonToExcel}>Download Excel</button>
+            <div className="grid md:grid-cols-3 items-center justify-center gap-6 mt-6">
+                {teams.length > 0 ? Teams : <p>Loading team data...</p>}
             </div>
-            {teams.length > 0 ? Teams : <p>Loading team data...</p>}
-        </main>
+        </div>
     );
 }

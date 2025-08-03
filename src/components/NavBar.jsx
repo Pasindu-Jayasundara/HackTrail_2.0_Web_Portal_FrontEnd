@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom"
 import { useAuth } from "../hooks/AuthContext"
+import { handleLogOut } from "../api/api";
 
 export default function NavBar() {
 
@@ -7,15 +8,18 @@ export default function NavBar() {
     const { isAuthenticated, setIsAuthenticated } = useAuth();
 
     const logout = () => {
-        if(isAuthenticated){
-            setIsAuthenticated(false);
-            localStorage.removeItem("auth");
-            navigate("/login", {replace : true})
-        }
+            handleLogOut().then(res => {
+                const loginState = res.isLogged;
+                if (!loginState) {
+                    setIsAuthenticated(loginState);
+                    localStorage.removeItem("auth");
+                    navigate("/login")
+                }
+            }).catch(err => console.log(err));
     }
 
     const login = () => {
-        navigate("/login", {replace : true})
+        navigate("/login", { replace: true })
     }
 
     return (

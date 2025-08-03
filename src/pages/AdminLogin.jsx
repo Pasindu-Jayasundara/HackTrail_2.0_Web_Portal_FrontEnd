@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthContext';
 import { validateLoginForm } from '../utils/validation';
+import { handleLogIn } from '../api/api';
 
 export default function AdminLogin() {
     const [formData, setFormData] = useState({
         username: "",
         password: ""
     })
-    
+
     const [errors, setErrors] = useState({
         username: "",
         password: ""
@@ -31,14 +32,20 @@ export default function AdminLogin() {
         setErrors(validationErrors);
 
         if (Object.keys(validationErrors).length === 0) {
-            setErrors({
-                username: "",
-                password: ""
-            })
 
-            setIsAuthenticated(true)
-            localStorage.setItem("auth", true);
-            navigate("/dashboard");
+            handleLogIn(formData).then(res => {
+                const loginState = res.isLogged;
+                if (loginState) {
+                    setErrors({
+                        username: "",
+                        password: ""
+                    })
+
+                    setIsAuthenticated(loginState);
+                    localStorage.setItem("auth", loginState);
+                    navigate("/dashboard");
+                }
+            }).catch(err => console.log(err));
         }
     };
 

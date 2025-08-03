@@ -1,3 +1,5 @@
+// import { userExistsByEmail } from "../api/api";
+
 const levels = {
   0: "2024",
   1: "2023",
@@ -17,14 +19,6 @@ const validateLoginForm = (form) => {
     err.password = "This field is required";
   }
 
-  if (form.username !== "admin") {
-    err.password = err.username = "Invalid credentials";
-  }
-
-  if (form.password !== "admin") {
-    err.username = err.password = "Invalid credentials";
-  }
-
   return err;
 };
 
@@ -38,7 +32,7 @@ const validateForm = (form) => {
   if (!validateEmail(form.email)) {
     err.email = "Enter a valid email";
   }
-
+  
   if (!validateTGNumber(form.tg)) {
     err.tg = "Enter a valid tg number";
   }

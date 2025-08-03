@@ -83,7 +83,7 @@ export default function RegisterTeam() {
     }
 
     return (
-        <main>
+        <div>
             <h2>Team Registration</h2>
             {registeredTeamIds.length < 15 ? (<TeamForm {...teamFormProps} />) : <p>Registration is Full</p>}
             {members.length > 0 && (<TeamMembers {...teamMemPrpos} />)}
@@ -91,6 +91,6 @@ export default function RegisterTeam() {
             <button disabled={members.length < 3} type="button" onClick={handleRegisterTeam} style={{ marginTop: '20px' }}>
                 Register Team
             </button>
-        </main>
+        </div>
     );
 }

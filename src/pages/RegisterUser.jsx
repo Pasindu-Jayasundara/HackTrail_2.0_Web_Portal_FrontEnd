@@ -27,9 +27,9 @@ export default function RegisterUser() {
     }
 
     return (
-        <main>
+        <div>
             <h2>Individual Registration</h2>
             <UserForm {...userFormProps} />
-        </main>
+        </div>
     );
 }

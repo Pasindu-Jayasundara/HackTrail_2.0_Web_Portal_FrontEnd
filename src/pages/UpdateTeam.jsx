@@ -77,7 +77,7 @@ export default function UpdateTeam() {
 
 
     return (
-        <main>
+        <div>
             <button onClick={toDashboard}>Back</button>
             <h2>Update Team</h2>
             <TeamForm {...teamFormProps} />
@@ -85,6 +85,6 @@ export default function UpdateTeam() {
             <button type="button" onClick={handleUpdateTeam} style={{ marginTop: '20px' }}>
                 Update Team
             </button>
-        </main>
+        </div>
     );
 }

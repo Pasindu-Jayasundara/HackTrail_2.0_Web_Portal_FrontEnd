@@ -27,8 +27,8 @@ export default function Teams() {
     );
 
     return (
-        <main>
+        <div className="grid md:grid-cols-3 items-center justify-center gap-6">
             {teams.length > 0 ? Teams : <p>Loading team data...</p>}
-        </main>
+        </div>
     );
 }
