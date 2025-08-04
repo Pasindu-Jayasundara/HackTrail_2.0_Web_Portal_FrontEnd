@@ -19,11 +19,10 @@ export default function TeamForm({ availableLevels, setMembers, memberForm, setM
         phone_no: ""
     })
 
-    const handleAddMember = (e) => {
+    const handleAddMember = async (e) => {
         e.preventDefault();
-        const validationErrors = validateForm(memberForm);
+        const validationErrors = await validateForm(memberForm);
         setErrors(validationErrors);
-
         if (Object.keys(validationErrors).length === 0) {
             if (editingIndex !== null) {
                 setMembers(prev => prev.map((m, i) => i === editingIndex ? memberForm : m));

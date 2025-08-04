@@ -31,9 +31,9 @@ export default function UserForm({ availableLevels, teamId }) {
     };
 
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = async(e) => {
         e.preventDefault();
-        const validationErrors = validateForm(userForm);
+        const validationErrors = await validateForm(userForm);
         setErrors(validationErrors);
 
         if (Object.keys(validationErrors).length === 0) {

@@ -1,4 +1,4 @@
-// import { userExistsByEmail } from "../api/api";
+import { userExistsByEmail } from "../api/api";
 
 const levels = {
   0: "2024",
@@ -22,7 +22,7 @@ const validateLoginForm = (form) => {
   return err;
 };
 
-const validateForm = (form) => {
+const validateForm = async (form) => {
   const err = {};
 
   if (form.name.trim() === "") {
@@ -31,8 +31,17 @@ const validateForm = (form) => {
 
   if (!validateEmail(form.email)) {
     err.email = "Enter a valid email";
+  } else {
+    try {
+      const res = await userExistsByEmail(form.email);
+      if (res?.userExist) {
+        err.email = "Email already exists";
+      }
+    } catch (err) {
+      err.email = "Error validating email";
+    }
   }
-  
+
   if (!validateTGNumber(form.tg)) {
     err.tg = "Enter a valid tg number";
   }
@@ -82,7 +91,4 @@ const validateTGNumber = (tg) => /^TG\/\d{4}\/\d{4}$/.test(tg);
 const validateEmail = (email) =>
   /^[a-zA-Z]+_\d{8}@fot\.ruh\.ac\.lk$/.test(email);
 
-export {
-  validateForm,
-  validateLoginForm
-}
+export { validateForm, validateLoginForm };
