@@ -50,7 +50,7 @@ export default function Team(props) {
     }
 
     return (
-        <div className="p-4 h-full bg-white rounded-md border-[1.5px] border-green-600 shadow-lg shadow-green-800/15 hover:scale-105 transition ">
+        <div className="p-4 h-full z-10 bg-white rounded-md border-[1.5px] border-green-600 shadow-lg shadow-green-800/15 hover:scale-105 transition ">
             <h2 className="text-lg capitalize text-gray-700 font-semibold mb-4">Team {props.team_id}</h2>
             {props.admin && <div className="flex w-1/2 my-3.5">
                 <button onClick={handleEdit} className="flex-1 px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition cursor-pointer" >Edit</button>

@@ -77,7 +77,7 @@ export default function UpdateTeam() {
 
 
     return (
-        <div>
+        <div className="mb-20 mt-30 w-11/12 mx-auto">
             <button onClick={toDashboard}>Back</button>
             <h2>Update Team</h2>
             <TeamForm {...teamFormProps} />

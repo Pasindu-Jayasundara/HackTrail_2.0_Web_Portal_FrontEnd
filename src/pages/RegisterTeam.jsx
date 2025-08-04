@@ -83,7 +83,7 @@ export default function RegisterTeam() {
     }
 
     return (
-        <div>
+        <div className="mb-20 mt-30 w-11/12 mx-auto">
             <h2>Team Registration</h2>
             {registeredTeamIds.length < 15 ? (<TeamForm {...teamFormProps} />) : <p>Registration is Full</p>}
             {members.length > 0 && (<TeamMembers {...teamMemPrpos} />)}

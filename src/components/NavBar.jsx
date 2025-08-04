@@ -23,9 +23,10 @@ export default function NavBar() {
     }
 
     return (
-        <header className="flex justify-between items-center w-full p-4 bg-green-50">
-            <img
-                src="https://static.cdnlogo.com/logos/a/75/aorus.png"
+        <nav className="w-full p-2 bg-white/30 backdrop-blur-3xl fixed top-0 left-0 z-20">
+            <div className="flex justify-between items-center w-11/12 mx-auto">
+                <img
+                src="https://static.cdnlogo.com/logos/w/95/webtorrent.svg"
                 alt="Aorus Logo"
                 className="w-20 object-contain"
             />
@@ -34,12 +35,13 @@ export default function NavBar() {
                 <NavLink to="/teams"><li className="cursor-pointer hover:text-blue-600 transition">Teams</li></NavLink>
                 <NavLink to="/reg"><li className="cursor-pointer hover:text-blue-600 transition">Register</li></NavLink>
             </ul>}
-            {isAuthenticated ? <button onClick={logout} className="cursor-pointer bg-blue-600 px-4 py-2 rounded-md text-white uppercase tracking-wide font-medium hover:bg-blue-700 transition">
+            {isAuthenticated ? <button onClick={logout} className="cursor-pointer bg-gray-900 px-4 py-2 text-xs rounded-md text-white uppercase tracking-wide hover:bg-green-600 transition">
                 logout
-            </button> : <button onClick={login} className="cursor-pointer bg-blue-600 px-4 py-2 rounded-md text-white uppercase tracking-wide font-medium hover:bg-blue-700 transition">
+            </button> : <button onClick={login} className="cursor-pointer bg-gray-900 px-4 py-2 text-xs rounded-md text-white uppercase tracking-wide hover:hover:bg-green-600 transition">
                 login
             </button>}
-        </header>
+            </div>
+        </nav>
 
     )
 }
