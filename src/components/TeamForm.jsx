@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { validateForm } from "../utils/validation";
 
-export default function TeamForm({ availableLevels, setMembers, memberForm, setMemberForm, editingIndex, setEditingIndex }){
+export default function TeamForm({ availableLevels, setMembers, memberForm, setMemberForm, editingIndex, setEditingIndex }) {
     const handleFormChange = (e) => {
         const { name, value } = e.target;
         setMemberForm(prev => ({
@@ -19,11 +19,10 @@ export default function TeamForm({ availableLevels, setMembers, memberForm, setM
         phone_no: ""
     })
 
-    const handleAddMember = (e) => {
+    const handleAddMember = async (e) => {
         e.preventDefault();
-        const validationErrors = validateForm(memberForm);
+        const validationErrors = await validateForm(memberForm);
         setErrors(validationErrors);
-
         if (Object.keys(validationErrors).length === 0) {
             if (editingIndex !== null) {
                 setMembers(prev => prev.map((m, i) => i === editingIndex ? memberForm : m));
@@ -53,82 +52,87 @@ export default function TeamForm({ availableLevels, setMembers, memberForm, setM
         }
     };
 
-    return(
-        <form onSubmit={handleAddMember}>
-                    <div>
-                        <label>Name:</label>
-                        <input
-                            type="text"
-                            name="name"
-                            value={memberForm.name}
-                            onChange={handleFormChange}
-                            required
-                        />
-                        {errors.name !== "" && <p>{errors.name}</p>}
-                    </div>
-                    <div>
-                        <label>Email:</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={memberForm.email}
-                            onChange={handleFormChange}
-                            required
-                        />
-                        {errors.email !== "" && <p>{errors.email}</p>}
-                    </div>
-                    <div>
-                        <label>TG Number:</label>
-                        <input
-                            type="text"
-                            name="tg"
-                            value={memberForm.tg}
-                            onChange={handleFormChange}
-                            required
-                        />
-                        {errors.tg !== "" && <p>{errors.tg}</p>}
-                    </div>
-                    <div>
-                        <label>Level:</label>
-                        <select
-                            name="level"
-                            value={memberForm.level}
-                            onChange={handleFormChange}
-                            required
-                        >
-                            <option value="">Select level</option>
-                            {availableLevels.map(level => (
-                                <option key={level} value={level}>{level}</option>
-                            ))}
-                        </select>
-                        {errors.level !== "" && <p>{errors.level}</p>}
-                    </div>
-                    <div>
-                        <label>Gender:</label>
-                        <select
-                            name="gender"
-                            value={memberForm.gender}
-                            onChange={handleFormChange}
-                            required
-                        >
-                            <option value="">Select gender</option>
-                            <option value="M">Male</option>
-                            <option value="F">Female</option>
-                        </select>
-                        {errors.gender !== "" && <p>{errors.gender}</p>}
-                    </div>
-                    <div>
-                        <label>Phone Number:</label>
-                        <input
-                            type="text"
-                            name="phone_no"
-                            value={memberForm.phone_no}
-                            onChange={handleFormChange}
-                            required
-                        />
-                        {errors.phone_no !== "" && <p>{errors.phone_no}</p>}
-                    </div>
-                    <button type="submit">{editingIndex !== null ? "Update Member" : "Add Member"}</button>
-                </form>
+    return (
+        <form onSubmit={handleAddMember} className="max-w-xl mx-auto rounded-md border-[1.5px] border-green-600 shadow-lg shadow-green-800/15 space-y-6 bg-white p-8">
+            <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">Name</label>
+                <input
+                    type="text"
+                    name="name"
+                    value={memberForm.name}
+                    onChange={handleFormChange}
+                    className="bg-green-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-green-400 focus:border-green-400 block w-full p-3"
+                />
+                {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name}</p>}
+            </div>
+            <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">Email</label>
+                <input
+                    type="email"
+                    name="email"
+                    value={memberForm.email}
+                    onChange={handleFormChange}
+                    className="bg-green-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-green-400 focus:border-green-400 block w-full p-3"
+                />
+                {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email}</p>}
+            </div>
+            <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">TG Number</label>
+                <input
+                    type="text"
+                    name="tg"
+                    value={memberForm.tg}
+                    onChange={handleFormChange}
+                    className="bg-green-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-green-400 focus:border-green-400 block w-full p-3"
+                />
+                {errors.tg && <p className="text-sm text-red-600 mt-1">{errors.tg}</p>}
+            </div>
+            <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">Level</label>
+                <select
+                    name="level"
+                    value={memberForm.level}
+                    onChange={handleFormChange}
+                    className="bg-green-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-green-400 focus:border-green-400 block w-full p-3"
+                >
+                    <option value="">Select level</option>
+                    {availableLevels.map(level => (
+                        <option key={level} value={level}>{level}</option>
+                    ))}
+                </select>
+                {errors.level && <p className="text-sm text-red-600 mt-1">{errors.level}</p>}
+            </div>
+            <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">Gender</label>
+                <select
+                    name="gender"
+                    value={memberForm.gender}
+                    onChange={handleFormChange}
+                    className="bg-green-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-green-400 focus:border-green-400 block w-full p-3"
+                >
+                    <option value="">Select gender</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                </select>
+                {errors.gender && <p className="text-sm text-red-600 mt-1">{errors.gender}</p>}
+            </div>
+            <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">Phone Number</label>
+                <input
+                    type="text"
+                    name="phone_no"
+                    value={memberForm.phone_no}
+                    onChange={handleFormChange}
+                    className="bg-green-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-green-400 focus:border-green-400 block w-full p-3"
+                />
+                {errors.phone_no && <p className="text-sm text-red-600 mt-1">{errors.phone_no}</p>}
+            </div>
+            <button
+                type="submit"
+                className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-md transition duration-300"
+            >
+                {editingIndex !== null ? "Update Member" : "Add Member"}
+            </button>
+        </form>
     )
 }

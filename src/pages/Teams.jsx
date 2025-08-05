@@ -11,7 +11,7 @@ export default function Teams() {
                 const data_ = data.map(d => {
                     return {
                         ...d,
-                        admin : false
+                        admin: false
                     }
                 })
                 setTeams(data_)
@@ -27,8 +27,11 @@ export default function Teams() {
     );
 
     return (
-        <div className="grid md:grid-cols-3 items-center justify-center gap-6">
-            {teams.length > 0 ? Teams : <p>Loading team data...</p>}
+        <div className="mb-20 mt-30 w-11/12 mx-auto">
+            <h1 className="text-center text-4xl mb-10 font-semibold tracking-wide text-gray-800">Teams</h1>
+            <div className="grid md:grid-cols-3 items-center justify-center gap-6">
+                {teams.length > 0 ? Teams : <p>Loading team data...</p>}
+            </div>
         </div>
     );
 }

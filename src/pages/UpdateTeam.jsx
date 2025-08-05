@@ -57,12 +57,12 @@ export default function UpdateTeam() {
         navigate('/dashboard');
     }
 
-        const teamFormProps = {
-        availableLevels, 
-        setMembers, 
-        memberForm, 
-        setMemberForm, 
-        editingIndex, 
+    const teamFormProps = {
+        availableLevels,
+        setMembers,
+        memberForm,
+        setMemberForm,
+        editingIndex,
         setEditingIndex
     }
 
@@ -77,12 +77,29 @@ export default function UpdateTeam() {
 
 
     return (
-        <div>
-            <button onClick={toDashboard}>Back</button>
-            <h2>Update Team</h2>
+        <div className="mb-20 mt-30 w-11/12 mx-auto text-center">
+            <button
+                onClick={toDashboard}
+                className="mb-6 px-5 py-2 text-sm font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50 transition duration-300"
+            >
+                Back
+            </button>
+
+            <h2 className="text-3xl font-bold mb-8 text-green-700">Update Team</h2>
+
             <TeamForm {...teamFormProps} />
-            {members.length > 0 && <TeamMembers {...teamMemPrpos} />}
-            <button type="button" onClick={handleUpdateTeam} style={{ marginTop: '20px' }}>
+
+            {members.length > 0 && (
+                <div className="mt-10">
+                    <TeamMembers {...teamMemPrpos} />
+                </div>
+            )}
+
+            <button
+                type="button"
+                onClick={handleUpdateTeam}
+                className="mt-6 px-6 py-3 text-white font-semibold rounded-lg shadow transition duration-300 bg-green-600 hover:bg-green-700"
+            >
                 Update Team
             </button>
         </div>
