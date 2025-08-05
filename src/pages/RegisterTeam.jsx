@@ -65,11 +65,11 @@ export default function RegisterTeam() {
     };
 
     const teamFormProps = {
-        availableLevels, 
-        setMembers, 
-        memberForm, 
-        setMemberForm, 
-        editingIndex, 
+        availableLevels,
+        setMembers,
+        memberForm,
+        setMemberForm,
+        editingIndex,
         setEditingIndex
     }
 
@@ -83,14 +83,36 @@ export default function RegisterTeam() {
     }
 
     return (
-        <div className="mb-20 mt-30 w-11/12 mx-auto">
-            <h2>Team Registration</h2>
-            {registeredTeamIds.length < 15 ? (<TeamForm {...teamFormProps} />) : <p>Registration is Full</p>}
-            {members.length > 0 && (<TeamMembers {...teamMemPrpos} />)}
-            {members.length < 3 && <p>Minimum Of 3 Members are needed</p>}
-            <button disabled={members.length < 3} type="button" onClick={handleRegisterTeam} style={{ marginTop: '20px' }}>
-                Register Team
-            </button>
-        </div>
+            <div className="mb-20 mt-30 w-11/12 mx-auto">
+                <h2 className="text-3xl font-bold mb-8 text-center">Team Registration</h2>
+
+                {registeredTeamIds.length < 15 ? (
+                    <TeamForm {...teamFormProps} />
+                ) : (
+                    <p className="text-red-600 font-semibold mb-4">Registration is Full</p>
+                )}
+
+                <div className="mt-6">
+                    <button
+                        disabled={members.length < 3}
+                        type="button"
+                        onClick={handleRegisterTeam}
+                        className={`px-6 py-3 text-white font-semibold rounded-lg shadow transition duration-300 ${members.length < 3
+                                ? "bg-gray-400 cursor-not-allowed"
+                                : "bg-green-600 hover:bg-green-700"
+                            }`}
+                    >
+                        Register Team
+                    </button>
+
+                    {members.length < 3 && (
+                        <p className="mt-2 text-sm text-gray-600">
+                            Minimum of 3 members are needed
+                        </p>
+                    )}
+                </div>
+
+                {members.length > 0 && <TeamMembers {...teamMemPrpos} />}
+            </div>
     );
 }
