@@ -92,7 +92,7 @@ export default function RegisterTeam() {
                     <p className="text-red-600 font-semibold mb-4">Registration is Full</p>
                 )}
 
-                <div className="mt-6">
+                <div className="mt-6 text-center">
                     <button
                         disabled={members.length < 3}
                         type="button"

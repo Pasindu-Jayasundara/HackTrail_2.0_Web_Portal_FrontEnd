@@ -5,7 +5,7 @@ import UserForm from "../components/UserForm";
 
 export default function RegisterUser() {
     let { id: teamId } = useParams();
-    
+
     const [availableLevels, setAvailableLevels] = useState([]);
 
 
@@ -27,8 +27,8 @@ export default function RegisterUser() {
     }
 
     return (
-        <div>
-            <h2>Individual Registration</h2>
+        <div className="mb-20 mt-30 w-11/12 mx-auto">
+            <h2 className="text-3xl font-bold mb-8 text-center">Individual Registration</h2>
             <UserForm {...userFormProps} />
         </div>
     );

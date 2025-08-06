@@ -26,8 +26,8 @@ export default function Home() {
         <div className="mt-16">
             <section className="flex flex-wrap">
                 <div className="w-full sm:w-8/12 mb-10">
-                    <div className="mx-auto h-full sm:p-10">
-                        <header className="container px-4 lg:flex mt-10 items-center h-full lg:mt-0">
+                    <div className="mx-auto h-full z">
+                        <header className="container px-4 mt-10 h-full lg:mt-0">
                             <div className="w-full">
                                 <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 animate-pulse">
                                     HackTrail <span className="text-green-600">2.0</span>
@@ -37,9 +37,9 @@ export default function Home() {
                                     Join the brightest minds at the University of Ruhuna for a 24-hour coding challenge where innovation meets impact. Build, solve, and compete one idea at a time
                                 </p>
                             </div>
+                            <StatsPanel />
                         </header>
                     </div>
-                    <StatsPanel />
                 </div>
                 <img
                     src={img}

@@ -50,39 +50,42 @@ export default function AdminLogin() {
     };
 
     return (
-        <div style={{ maxWidth: 400, margin: '50px auto', padding: 20, border: '1px solid #ccc', borderRadius: 8 }}>
-            <h2>Admin Login</h2>
-            <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: 16 }}>
-                    <label>
-                        Username:
-                        <input
-                            type="text"
-                            name="username"
-                            value={formData.username}
-                            onChange={handleChange}
-                            style={{ width: '100%', padding: 8, marginTop: 4 }}
-                            required
-                        />
-                    </label>
-                    {errors.username != "" && <p>{errors.username}</p>}
-                </div>
-                <div style={{ marginBottom: 16 }}>
-                    <label>
-                        Password:
-                        <input
-                            type="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            style={{ width: '100%', padding: 8, marginTop: 4 }}
-                            required
-                        />
-                    </label>
-                    {errors.password != "" && <p>{errors.password}</p>}
-                </div>
-                <button type="submit" style={{ width: '100%', padding: 10 }}>Login</button>
-            </form>
+
+        <div className='w-11/12 mx-auto mt-30 mb-30'>
+            <h2 className="text-3xl font-bold text-center text-gray-800">Admin Login</h2>
+            <form onSubmit={handleSubmit} className="max-w-sm mx-auto rounded-md border-[1.5px] border-green-600 shadow-lg shadow-green-800/15 space-y-6 bg-white p-8 mt-10">
+
+            <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">Username</label>
+                <input
+                    type="text"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    className="bg-green-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-green-400 focus:border-green-400 block w-full p-3"
+                />
+                {errors.username && <p className="text-sm text-red-600 mt-1">{errors.username}</p>}
+            </div>
+
+            <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="bg-green-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-green-400 focus:border-green-400 block w-full p-3"
+                />
+                {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password}</p>}
+            </div>
+
+            <button
+                type="submit"
+                className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-md transition duration-300"
+            >
+                Login
+            </button>
+        </form>
         </div>
     );
 };

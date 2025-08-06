@@ -77,31 +77,36 @@ export default function UpdateTeam() {
 
 
     return (
-        <div className="mb-20 mt-30 w-11/12 mx-auto text-center">
+        <div className="mb-20 mt-30 w-11/12 mx-auto">
             <button
                 onClick={toDashboard}
-                className="mb-6 px-5 py-2 text-sm font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50 transition duration-300"
+                className="mb-6 text-center px-5 py-2 text-sm font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50 transition duration-300"
             >
                 Back
             </button>
+            <div>
 
-            <h2 className="text-3xl font-bold mb-8 text-green-700">Update Team</h2>
+                <h2 className="text-3xl font-bold mb-8 text-center">Update Team</h2>
 
-            <TeamForm {...teamFormProps} />
+                <TeamForm {...teamFormProps} />
 
-            {members.length > 0 && (
-                <div className="mt-10">
-                    <TeamMembers {...teamMemPrpos} />
+                <div className="text-center my-6">
+                    <button
+                    type="button"
+                    onClick={handleUpdateTeam}
+                    className="mx-auto px-6 py-3 text-white font-semibold rounded-lg shadow transition duration-300 bg-green-600 hover:bg-green-700 cursor-pointer"
+                >
+                    Update Team
+                </button>
                 </div>
-            )}
 
-            <button
-                type="button"
-                onClick={handleUpdateTeam}
-                className="mt-6 px-6 py-3 text-white font-semibold rounded-lg shadow transition duration-300 bg-green-600 hover:bg-green-700"
-            >
-                Update Team
-            </button>
+                {members.length > 0 && (
+                    <div className="mt-5">
+                        <TeamMembers {...teamMemPrpos} />
+                    </div>
+                )}
+
+            </div>
         </div>
     );
 }
