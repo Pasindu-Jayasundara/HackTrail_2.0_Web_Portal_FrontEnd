@@ -8,7 +8,6 @@ export default function UpdateTeam() {
     let { id: teamId } = useParams();
     const navigate = useNavigate();
 
-    const [availableLevels, setAvailableLevels] = useState([])
     const [members, setMembers] = useState([]);
     const [editingIndex, setEditingIndex] = useState(null);
     const [memberForm, setMemberForm] = useState({
@@ -20,25 +19,13 @@ export default function UpdateTeam() {
         phone_no: ""
     });
 
-    const updateLevels = () => {
-        const allLevels = [0, 1, 2, 3, 4];
-        const takenLevels = members.map(member => parseInt(member.level));
-        const openLevels = allLevels.filter(level => !takenLevels.includes(level));
-        setAvailableLevels(openLevels);
-    }
-
     useEffect(() => {
         getTeam(teamId)
             .then(team => {
                 setMembers(team.members);
-                setAvailableLevels([0, 1, 2, 3, 4]);
             })
             .catch(err => console.error(err));
-    }, []);
-
-    useEffect(() => {
-        updateLevels();
-    }, [members])
+    }, [members]);
 
 
     const handleUpdateTeam = () => {
@@ -47,7 +34,10 @@ export default function UpdateTeam() {
         };
 
         updateTeam(teamId, team)
-            .then(res => console.log(res))
+            .then(res => {
+                console.log(res);
+                navigate("/dashboard");
+            })
             .catch(err => {
                 console.error(err);
             });
@@ -58,7 +48,7 @@ export default function UpdateTeam() {
     }
 
     const teamFormProps = {
-        availableLevels,
+        members,
         setMembers,
         memberForm,
         setMemberForm,
@@ -70,9 +60,7 @@ export default function UpdateTeam() {
         members,
         setMemberForm,
         setMembers,
-        setEditingIndex,
-        setAvailableLevels,
-        availableLevels
+        setEditingIndex
     }
 
 
@@ -99,6 +87,12 @@ export default function UpdateTeam() {
                     Update Team
                 </button>
                 </div>
+
+                {members.length == 5 && (
+                    <p className="text-center text-sm text-gray-600">
+                        Team has no empty slots
+                    </p>
+                )}
 
                 {members.length > 0 && (
                     <div className="mt-5">

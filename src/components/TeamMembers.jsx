@@ -1,13 +1,13 @@
-export default function TeamMembers({ members, setMembers, setMemberForm, setEditingIndex, setAvailableLevels, availableLevels }) {
+export default function TeamMembers({ members, setMembers, setMemberForm, setEditingIndex }) {
 
     const handleEditMember = (index) => {
         const memberToEdit = members[index];
         setMemberForm(memberToEdit);
         setEditingIndex(index);
-        setAvailableLevels([
-            ...availableLevels,
-            memberToEdit.level
-        ]);
+        // setAvailableLevels([
+        //     ...availableLevels,
+        //     memberToEdit.level
+        // ]);
     };
 
     const handleDeleteMember = (index) => {

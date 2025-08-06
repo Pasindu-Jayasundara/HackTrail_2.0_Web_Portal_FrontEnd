@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { validateForm } from "../utils/validation";
 
-export default function TeamForm({ availableLevels, setMembers, memberForm, setMemberForm, editingIndex, setEditingIndex }) {
+export default function TeamForm({ members, setMembers, memberForm, setMemberForm, editingIndex, setEditingIndex }) {
     const handleFormChange = (e) => {
         const { name, value } = e.target;
         setMemberForm(prev => ({
@@ -21,12 +21,30 @@ export default function TeamForm({ availableLevels, setMembers, memberForm, setM
 
     const handleAddMember = async (e) => {
         e.preventDefault();
-        const validationErrors = await validateForm(memberForm);
+        const validationErrors = await validateForm(memberForm, editingIndex);
         setErrors(validationErrors);
+
+        const levelInstances = members.filter(mem => mem.level == memberForm.level);
+
+        if (levelInstances.length > 1) {
+            setErrors({
+                ...setErrors,
+                level: "There can be only maximum 2 members from each level"
+            })
+            return
+        }
+
+
         if (Object.keys(validationErrors).length === 0) {
+
             if (editingIndex !== null) {
                 setMembers(prev => prev.map((m, i) => i === editingIndex ? memberForm : m));
             } else {
+
+                if (members.length > 4) {
+                    return
+                }
+
                 setMembers(prev => [...prev, memberForm]);
             }
 
@@ -96,9 +114,12 @@ export default function TeamForm({ availableLevels, setMembers, memberForm, setM
                     className="bg-green-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-green-400 focus:border-green-400 block w-full p-3"
                 >
                     <option value="">Select level</option>
-                    {availableLevels.map(level => (
-                        <option key={level} value={level}>{level}</option>
-                    ))}
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+
                 </select>
                 {errors.level && <p className="text-sm text-red-600 mt-1">{errors.level}</p>}
             </div>
@@ -129,7 +150,7 @@ export default function TeamForm({ availableLevels, setMembers, memberForm, setM
             </div>
             <button
                 type="submit"
-                className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-md transition duration-300"
+                className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-md transition duration-300 cursor-pointer"
             >
                 {editingIndex !== null ? "Update Member" : "Add Member"}
             </button>

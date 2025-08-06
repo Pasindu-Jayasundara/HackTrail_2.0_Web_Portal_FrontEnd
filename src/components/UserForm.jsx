@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { validateForm } from "../utils/validation";
 import { registerUser } from "../api/api";
+import { useNavigate } from "react-router-dom";
 
-export default function UserForm({ availableLevels, teamId }) {
+
+export default function UserForm({ members, teamId }) {
+    const navigate =  useNavigate();
 
     const [userForm, setUserForm] = useState({
         name: "",
@@ -36,6 +39,17 @@ export default function UserForm({ availableLevels, teamId }) {
         const validationErrors = await validateForm(userForm);
         setErrors(validationErrors);
 
+        const levelInstances = members.filter(mem => mem.level == userForm.level);
+
+        if (levelInstances.length > 1) {
+            setErrors({
+                ...setErrors,
+                level: "There can be only maximum 2 members from each level"
+            })
+            return
+        }
+
+
         if (Object.keys(validationErrors).length === 0) {
             const newUser = {
                 team_id: teamId,
@@ -43,7 +57,10 @@ export default function UserForm({ availableLevels, teamId }) {
             };
 
             registerUser(newUser)
-                .then(res => console.log(res))
+                .then(res => {
+                    console.log(res);
+                    navigate("/teams");
+                })
                 .catch(err => console.error(err));
 
             setUserForm({
@@ -114,9 +131,12 @@ export default function UserForm({ availableLevels, teamId }) {
                     className="bg-green-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-green-400 focus:border-green-400 block w-full p-3"
                 >
                     <option value="">Select level</option>
-                    {availableLevels.map(level => (
-                        <option key={level} value={level}>{level}</option>
-                    ))}
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+
                 </select>
                 {errors.level && <p className="text-sm text-red-600 mt-1">{errors.level}</p>}
             </div>
@@ -154,6 +174,16 @@ export default function UserForm({ availableLevels, teamId }) {
             >
                 Register
             </button>
+
+            {members.length == 5 ? (
+                <p className="mt-2 text-sm text-center text-gray-600">
+                    Team has no empty slots
+                </p>
+            ) : (
+                <p className="mt-2 text-sm text-center text-gray-600">
+                    {5 - members.length} slots are available
+                </p>
+            )}
         </form>
 
     )

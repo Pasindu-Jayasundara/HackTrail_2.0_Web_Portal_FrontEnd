@@ -51,15 +51,11 @@ const validateForm = async (form) => {
   }
 
   if (!form.gender || form.gender === "") {
-    err.level = "This field is required";
+    err.gender = "This field is required";
   }
 
   if (!validatePhoneNo(form.phone_no)) {
     err.phone_no = "Enter a valid phone number";
-  }
-
-  if (form.gender.trim() === "") {
-    err.gender = "This field is required";
   }
 
   if (Object.keys(err).length === 0) {

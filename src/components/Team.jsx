@@ -5,22 +5,17 @@ import { deleteTeam } from "../api/api";
 export default function Team(props) {
     const navigate = useNavigate();
     const [leader, setLeader] = useState(null);
-    const [empSlots, setEmpSlots] = useState([])
 
     useEffect(() => {
-        const lead = props.members.find(mem => mem.level === 4);
+        const levels = props.members.map(mem => mem.level);
+        const maxLevel = Math.max(...levels);
+        const lead = props.members.find(mem => mem.level === maxLevel);
         if (lead) {
             setLeader({
                 name: lead.name,
                 phone_no: lead.phone_no,
             });
         }
-
-        const arr = [0, 1, 2, 3, 4];
-        const levels = props.members.map(mem => mem.level)
-        const emptyLevels = arr.filter(level => !levels.includes(level))
-        setEmpSlots(emptyLevels)
-
     }, [props.members]);
 
     const Members = props.members.map((mem, idx) => (
@@ -32,14 +27,19 @@ export default function Team(props) {
         </tr>
     ));
 
-    const EmpSlots = empSlots.map((level, idx) => (
-        <tr className="text-gray-400 border-b-[1px] border-green-400" key={idx}>
-            <td className="p-2">Empty</td>
-            <td className="p-2">Empty</td>
-            <td className="p-2">{level}</td>
-            <td className="p-2">Empty</td>
-        </tr>
-    ));
+    const EmpSlots = []
+
+    for (let i = 0; i < 5 - props.members.length; i++) {
+        EmpSlots.push(
+            <tr className="text-gray-400 border-b-[1px] border-green-400" key={i}>
+                <td className="p-2">Empty</td>
+                <td className="p-2">Empty</td>
+                <td className="p-2">Empty</td>
+                <td className="p-2">Empty</td>
+            </tr>
+        )
+
+    }
 
     const applyTeam = () => {
         navigate(`/reg/user/${props.team_id}`);
@@ -77,7 +77,7 @@ export default function Team(props) {
                         <p className="font-semibold">Telephone: {leader.phone_no}</p>
                     </div>
                 )}
-                {empSlots.length > 0 && !props.admin && <button className="px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition cursor-pointer" onClick={applyTeam} >Apply</button>}
+                {EmpSlots.length > 0 && !props.admin && <button className="px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition cursor-pointer" onClick={applyTeam} >Apply</button>}
             </div>
         </div>
     );
