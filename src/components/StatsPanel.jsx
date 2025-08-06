@@ -13,20 +13,17 @@ export default function StatsPanel() {
       })
       .catch(err => console.log(err));
 
-    
     fetchTeams()
       .then(teams => {
         setNoOfTeams(teams.length);
       })
       .catch(err => console.log(err));
-
-    
   }, []);
 
   return (
     <div className="flex flex-wrap items-center justify-center gap-6">
-      <Counter number={noOfTeams} title="Teams" />
-      <Counter number={noOfUsers} title="Participants" />
+      <Counter number={noOfTeams} title="Teams" emoji="👥" />
+      <Counter number={noOfUsers} title="Participants" emoji="🎓" />
     </div>
   );
 }
