@@ -4,7 +4,7 @@ export default function Counter({ number, title }) {
     return (
         <div className="flex flex-col items-center justify-center p-6 rounded-lg shadow-md w-40">
             <CountUp
-                duration={10}
+                duration={1}
                 end={number}
                 className="text-4xl font-extrabold text-green-600"
             />

@@ -21,6 +21,16 @@ export const registerUser = async (user) => {
   }
 };
 
+export const fetchUsers = async () => {
+  try {
+    const res = await axios.get("/users");
+    return res.data;
+  } catch (err) {
+    console.error("Error logging out user", err.message);
+    throw err;
+  }
+};
+
 export const userExistsByEmail = async (email) => {
   try {
     const res = await axios.get(`/users/`, {

@@ -1,8 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import img from "../assets/coder.webp"
 import StatsPanel from "../components/StatsPanel"
 import { ClockIcon, CurrencyDollarIcon, UsersIcon } from "@heroicons/react/24/outline";
 
 export default function Home() {
+
+    const navigate = useNavigate();
 
     const features = [
         {
@@ -69,7 +72,7 @@ export default function Home() {
                             const Icon = card.icon;
                             return (
                                 <div
-                                    className=" max-w-xs h-full text-center bg-white border-[2px] border-green-500 rounded-xl shadow-md hover:shadow-green-400/60 hover:scale-105 transition duration-300 p-6"
+                                    className="cursor-pointer max-w-xs h-full text-center bg-white border-[2px] border-green-500 rounded-xl shadow-md hover:shadow-green-400/60 hover:scale-105 transition duration-300 p-6"
                                     key={idx}
                                 >
                                     <div className="flex justify-center mb-4">
@@ -96,18 +99,18 @@ export default function Home() {
                     <h2 className="text-5xl font-bold text-green-800 mb-8">Registration</h2>
 
                     <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
-                        <a
-                            href="http://"
-                            className="px-8 py-4 text-lg bg-green-600 text-white font-semibold rounded-xl shadow hover:bg-green-700 transition duration-300"
+                        <button
+                            onClick={() => navigate("/reg/team")}
+                            className="cursor-pointer px-8 py-4 text-lg bg-green-600 text-white font-semibold rounded-xl shadow hover:bg-green-700 transition duration-300"
                         >
                             Team Registration
-                        </a>
-                        <a
-                            href="http://"
-                            className="px-8 py-4 text-lg bg-white text-green-700 font-semibold border border-green-600 rounded-xl shadow hover:bg-green-50 transition duration-300"
+                        </button>
+                        <button
+                            onClick={() => navigate("/teams")}
+                            className="cursor-pointer px-8 py-4 text-lg bg-white text-green-700 font-semibold border border-green-600 rounded-xl shadow hover:bg-green-50 transition duration-300"
                         >
                             Apply for a Team
-                        </a>
+                        </button>
                     </div>
 
                 </div>
