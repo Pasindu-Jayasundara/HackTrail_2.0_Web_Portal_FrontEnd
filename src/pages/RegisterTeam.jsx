@@ -63,7 +63,8 @@ export default function RegisterTeam() {
         memberForm,
         setMemberForm,
         editingIndex,
-        setEditingIndex
+        setEditingIndex,
+        admin : false
     }
 
     const teamMemPrpos = {

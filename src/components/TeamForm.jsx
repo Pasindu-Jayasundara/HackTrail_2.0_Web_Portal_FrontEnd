@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { validateForm } from "../utils/validation";
 
-export default function TeamForm({ members, setMembers, memberForm, setMemberForm, editingIndex, setEditingIndex }) {
+export default function TeamForm({ members, setMembers, memberForm, setMemberForm, editingIndex, setEditingIndex, admin }) {
     const handleFormChange = (e) => {
         const { name, value } = e.target;
         setMemberForm(prev => ({
@@ -21,7 +21,7 @@ export default function TeamForm({ members, setMembers, memberForm, setMemberFor
 
     const handleAddMember = async (e) => {
         e.preventDefault();
-        const validationErrors = await validateForm(memberForm, editingIndex);
+        const validationErrors = admin ? await validateForm(memberForm, false) : await validateForm(memberForm, true);
         setErrors(validationErrors);
 
         const levelInstances = members.filter(mem => mem.level == memberForm.level);

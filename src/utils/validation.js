@@ -22,7 +22,7 @@ const validateLoginForm = (form) => {
   return err;
 };
 
-const validateForm = async (form) => {
+const validateForm = async (form, onEdit) => {
   const err = {};
 
   if (form.name.trim() === "") {
@@ -32,13 +32,17 @@ const validateForm = async (form) => {
   if (!validateEmail(form.email)) {
     err.email = "Enter a valid email";
   } else {
-    try {
-      const res = await userExistsByEmail(form.email);
-      if (res?.userExist) {
-        err.email = "Email already exists";
+    if (onEdit) {
+      console.log(onEdit);
+      
+      try {
+        const res = await userExistsByEmail(form.email);
+        if (res?.userExist) {
+          err.email = "Email already exists";
+        }
+      } catch (err) {
+        err.email = "Error validating email";
       }
-    } catch (err) {
-      err.email = "Error validating email";
     }
   }
 

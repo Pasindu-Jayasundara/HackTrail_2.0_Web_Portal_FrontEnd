@@ -25,7 +25,7 @@ export default function UpdateTeam() {
                 setMembers(team.members);
             })
             .catch(err => console.error(err));
-    }, [members]);
+    }, []);
 
 
     const handleUpdateTeam = () => {
@@ -53,7 +53,8 @@ export default function UpdateTeam() {
         memberForm,
         setMemberForm,
         editingIndex,
-        setEditingIndex
+        setEditingIndex,
+        admin : true
     }
 
     const teamMemPrpos = {
