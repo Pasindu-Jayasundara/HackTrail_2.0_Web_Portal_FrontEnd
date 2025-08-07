@@ -69,7 +69,7 @@ export default function UpdateTeam() {
         <div className="mb-20 mt-30 w-11/12 mx-auto">
             <button
                 onClick={toDashboard}
-                className="mb-6 text-center px-5 py-2 text-sm font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50 transition duration-300"
+                className="px-4 py-2 mb-6 bg-green-600 font-semibold text-white text-sm rounded hover:bg-green-700 transition transition-300 cursor-pointer"
             >
                 Back
             </button>
