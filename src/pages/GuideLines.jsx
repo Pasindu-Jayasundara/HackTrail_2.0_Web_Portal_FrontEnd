@@ -37,6 +37,9 @@ export default function GuideLines() {
                         <span className="font-semibold text-gray-900">Email Requirement:</span> Registration must be done using your Faculty of Technology email: <code>name_xxxxxxxx@fot.ruh.ac.lk</code>
                     </li>
                     <li>
+                        <span className="font-semibold text-gray-900">Telephone Requirement:</span> You must register with a valid mobile number that is reachable via WhatsApp.
+                    </li>
+                    <li>
                         <span className="font-semibold text-gray-900">TG Number Requirement:</span> You must provide a valid TG number assigned by the Faculty of Technology (e.g., <code>TG2021001</code>).
                     </li>
                     <li>
@@ -59,7 +62,7 @@ export default function GuideLines() {
             </section>
 
             {/* About Team */}
-            
+
             <section className="bg-green-50 rounded-md border-[1.5px] border-green-600 shadow-lg shadow-green-800/15 p-6 mb-12">
                 <h3 className="text-2xl font-semibold mb-4 text-gray-900">Team Registration</h3>
                 <ul className="list-decimal space-y-3 text-gray-800 ml-5">
@@ -76,6 +79,9 @@ export default function GuideLines() {
                         <span className="font-semibold text-gray-900">Email Requirement:</span> Registration must be done using your Faculty of Technology email: <code>name_xxxxxxxx@fot.ruh.ac.lk</code>
                     </li>
                     <li>
+                        <span className="font-semibold text-gray-900">Telephone Requirement:</span> You must register with a valid mobile number that is reachable via WhatsApp.
+                    </li>
+                    <li>
                         <span className="font-semibold text-gray-900">Academic Level Diversity:</span> Each team must include members from at least <strong>three different academic levels</strong>. A maximum of 3 members can be from the same level, and the remaining 2 must be from two other different levels.
                         <ul className="list-disc ml-6 mt-2 space-y-1">
                             <li><strong>Level 0:</strong> Batch 9</li>
@@ -90,7 +96,7 @@ export default function GuideLines() {
                     </li>
                 </ul>
             </section>
-            
+
         </div>
     );
 }

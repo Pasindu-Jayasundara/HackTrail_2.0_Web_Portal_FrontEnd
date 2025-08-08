@@ -21,7 +21,7 @@ export default function StatsPanel() {
   }, []);
 
   return (
-    <div className="flex flex-wrap items-center justify-center gap-6">
+    <div className="w-11/12 flex flex-wrap items-center justify-center gap-6 mx-auto">
       <Counter number={noOfTeams} title="Teams" emoji="👥" />
       <Counter number={noOfUsers} title="Participants" emoji="🎓" />
     </div>

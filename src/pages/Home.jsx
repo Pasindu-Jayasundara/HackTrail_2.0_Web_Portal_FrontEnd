@@ -26,9 +26,8 @@ export default function Home() {
 
     return (
         <div className="mt-16">
-            {/* Hero Section */}
-            <section className="flex flex-wrap">
-                <div className="w-4/6 flex flex-col items-center justify-center">
+            <section className="flex md:flex-row flex-col">
+                <div className="md:w-4/6 flex flex-col items-center justify-center mb-12 md:mb-0">
                     <div className="w-11/12 p-9">
                         <h1 className="text-5xl font-bold text-gray-900 animate-pulse">
                             HackTrail <span className="text-green-600">2.0</span>
@@ -46,8 +45,6 @@ export default function Home() {
                     className="w-full h-48 object-cover sm:h-screen sm:w-4/12"
                 />
             </section>
-
-            {/* Coming Soon Section */}
             <section className="bg-gradient-to-r from-green-900 to-black py-20">
                 <div className="w-11/12 max-w-4xl mx-auto text-center text-white">
                     <h2 className="text-4xl font-bold mb-4">Coming Soon</h2>
@@ -56,8 +53,6 @@ export default function Home() {
                     </p>
                 </div>
             </section>
-
-            {/* Features / Card Section */}
             <section className="py-20">
                 <h2 className="text-4xl font-bold text-center text-gray-900 mb-16 animate-flicker capitalize">
                     Code the Future
@@ -86,8 +81,6 @@ export default function Home() {
                     }
                 </div>
             </section>
-
-            {/* Registration Section */}
             <section className="bg-green-100 py-28">
                 <div className="w-11/12 max-w-6xl mx-auto text-center">
                     <h2 className="text-4xl font-bold text-green-800 mb-8">Registration</h2>
