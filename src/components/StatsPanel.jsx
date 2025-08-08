@@ -1,7 +1,29 @@
+import { useEffect, useState } from "react";
+import { fetchUsers, fetchTeams } from "../api/api";
+import Counter from "./Counter";
+
 export default function StatsPanel() {
-    return (
-        <div>
-            <h1>Current Registration Stats</h1>
-        </div>
-    )
+  const [noOfUsers, setNoOfUsers] = useState(0);
+  const [noOfTeams, setNoOfTeams] = useState(0);
+
+  useEffect(() => {
+    fetchUsers()
+      .then(users => {
+        setNoOfUsers(users.length);
+      })
+      .catch(err => console.log(err));
+
+    fetchTeams()
+      .then(teams => {
+        setNoOfTeams(teams.length);
+      })
+      .catch(err => console.log(err));
+  }, []);
+
+  return (
+    <div className="w-11/12 flex flex-wrap items-center justify-center gap-6 mx-auto">
+      <Counter number={noOfTeams} title="Teams" emoji="👥" />
+      <Counter number={noOfUsers} title="Participants" emoji="🎓" />
+    </div>
+  );
 }

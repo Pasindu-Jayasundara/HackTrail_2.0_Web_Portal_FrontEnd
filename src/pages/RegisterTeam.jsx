@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { registerTeam, fetchTeams } from "../api/api";
 import TeamMembers from "../components/TeamMembers";
 import TeamForm from "../components/TeamForm"
+import { useNavigate } from "react-router-dom";
+
 
 
 export default function RegisterTeam() {
+    const navigate = useNavigate();
     const [members, setMembers] = useState([]);
     const [registeredTeamIds, setRegisteredTeamIds] = useState([]);
-    const [availableLevels, setAvailableLevels] = useState([])
     const [memberForm, setMemberForm] = useState({
         name: "",
         email: "",
@@ -19,28 +21,17 @@ export default function RegisterTeam() {
 
     const [editingIndex, setEditingIndex] = useState(null);
 
-    const updateLevels = () => {
-        const allLevels = [0, 1, 2, 3, 4];
-        const takenLevels = members.map(member => parseInt(member.level));
-        const openLevels = allLevels.filter(level => !takenLevels.includes(level));
-        setAvailableLevels(openLevels);
-    }
-
     useEffect(() => {
         fetchTeams()
             .then(data => {
                 const teamIds = data.map(team => team.team_id_);
                 setRegisteredTeamIds(teamIds);
-                setAvailableLevels([0, 1, 2, 3, 4])
             })
             .catch(err => {
                 console.error(err);
             });
     }, []);
 
-    useEffect(() => {
-        updateLevels();
-    }, [members])
 
     const handleRegisterTeam = () => {
         if (members.length > 2) {
@@ -50,8 +41,10 @@ export default function RegisterTeam() {
             };
 
             registerTeam(team)
-                .then(res => console.log(res))
-                .catch(err => {
+                .then(res => {
+                    console.log(res);
+                    navigate("/teams")
+                }).catch(err => {
                     console.error(err);
                 });
         }
@@ -65,12 +58,13 @@ export default function RegisterTeam() {
     };
 
     const teamFormProps = {
-        availableLevels,
+        members,
         setMembers,
         memberForm,
         setMemberForm,
         editingIndex,
-        setEditingIndex
+        setEditingIndex,
+        admin: false
     }
 
     const teamMemPrpos = {
@@ -78,41 +72,50 @@ export default function RegisterTeam() {
         setMemberForm,
         setMembers,
         setEditingIndex,
-        setAvailableLevels,
-        availableLevels
     }
 
     return (
-            <div className="mb-20 mt-30 w-11/12 mx-auto">
-                <h2 className="text-3xl font-bold mb-8 text-center">Team Registration</h2>
+        <div className="mb-20 mt-30 w-11/12 mx-auto">
+            <button
+                onClick={() => navigate("/guidelines")}
+                className="px-4 py-2 mb-6 bg-green-600 font-semibold text-white text-sm rounded hover:bg-green-700 transition transition-300 cursor-pointer"
+            >
+                Guidelines
+            </button>
+            <h2 className="text-3xl font-bold mb-8 text-center  text-gray-900">Team Registration</h2>
+            {registeredTeamIds.length < 15 ? (
+                <TeamForm {...teamFormProps} />
+            ) : (
+                <p className="text-red-600 font-semibold mb-4">Registration is Full</p>
+            )}
 
-                {registeredTeamIds.length < 15 ? (
-                    <TeamForm {...teamFormProps} />
-                ) : (
-                    <p className="text-red-600 font-semibold mb-4">Registration is Full</p>
+            <div className="my-6 text-center">
+                <button
+                    disabled={members.length < 3}
+                    type="button"
+                    onClick={handleRegisterTeam}
+                    className={`px-6 py-3 text-white font-semibold rounded-lg shadow transition duration-300 ${members.length < 3
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-green-600 hover:bg-green-700"
+                        }`}
+                >
+                    Register Team
+                </button>
+
+                {members.length < 3 && (
+                    <p className="mt-2 text-sm text-gray-600">
+                        Minimum of 3 members are needed
+                    </p>
                 )}
 
-                <div className="mt-6">
-                    <button
-                        disabled={members.length < 3}
-                        type="button"
-                        onClick={handleRegisterTeam}
-                        className={`px-6 py-3 text-white font-semibold rounded-lg shadow transition duration-300 ${members.length < 3
-                                ? "bg-gray-400 cursor-not-allowed"
-                                : "bg-green-600 hover:bg-green-700"
-                            }`}
-                    >
-                        Register Team
-                    </button>
-
-                    {members.length < 3 && (
-                        <p className="mt-2 text-sm text-gray-600">
-                            Minimum of 3 members are needed
-                        </p>
-                    )}
-                </div>
-
-                {members.length > 0 && <TeamMembers {...teamMemPrpos} />}
+                {members.length == 5 && (
+                    <p className="mt-2 text-sm text-gray-600">
+                        Team has no empty slots
+                    </p>
+                )}
             </div>
+
+            {members.length > 0 && <TeamMembers {...teamMemPrpos} />}
+        </div>
     );
 }

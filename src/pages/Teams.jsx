@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Team from "../components/Team";
 import { fetchTeams } from "../api/api";
+import Spinner from "../components/Spinner";
 
 export default function Teams() {
     const [teams, setTeams] = useState([]);
@@ -28,10 +29,16 @@ export default function Teams() {
 
     return (
         <div className="mb-20 mt-30 w-11/12 mx-auto">
-            <h1 className="text-center text-4xl mb-10 font-semibold tracking-wide text-gray-800">Teams</h1>
-            <div className="grid md:grid-cols-3 items-center justify-center gap-6">
-                {teams.length > 0 ? Teams : <p>Loading team data...</p>}
-            </div>
+            <h1 className="text-3xl font-bold mb-8 text-center text-gray-900">Teams</h1>
+            {teams.length > 0 ? (
+                <div className="grid md:grid-cols-3 gap-6">
+                    {Teams}
+                </div>
+            ) : (
+                <div className="flex items-center justify-center min-h-[300px]">
+                    <Spinner />
+                </div>
+            )}
         </div>
     );
 }

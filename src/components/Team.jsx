@@ -5,22 +5,17 @@ import { deleteTeam } from "../api/api";
 export default function Team(props) {
     const navigate = useNavigate();
     const [leader, setLeader] = useState(null);
-    const [empSlots, setEmpSlots] = useState([])
 
     useEffect(() => {
-        const lead = props.members.find(mem => mem.level === 4);
+        const levels = props.members.map(mem => mem.level);
+        const maxLevel = Math.max(...levels);
+        const lead = props.members.find(mem => mem.level === maxLevel);
         if (lead) {
             setLeader({
                 name: lead.name,
                 phone_no: lead.phone_no,
             });
         }
-
-        const arr = [0, 1, 2, 3, 4];
-        const levels = props.members.map(mem => mem.level)
-        const emptyLevels = arr.filter(level => !levels.includes(level))
-        setEmpSlots(emptyLevels)
-
     }, [props.members]);
 
     const Members = props.members.map((mem, idx) => (
@@ -32,14 +27,19 @@ export default function Team(props) {
         </tr>
     ));
 
-    const EmpSlots = empSlots.map((level, idx) => (
-        <tr className="text-gray-400 border-b-[1px] border-green-400" key={idx}>
-            <td className="p-2">Empty</td>
-            <td className="p-2">Empty</td>
-            <td className="p-2">{level}</td>
-            <td className="p-2">Empty</td>
-        </tr>
-    ));
+    const EmpSlots = []
+
+    for (let i = 0; i < 5 - props.members.length; i++) {
+        EmpSlots.push(
+            <tr className="text-gray-400 border-b-[1px] border-green-400" key={i}>
+                <td className="p-2">Empty</td>
+                <td className="p-2">Empty</td>
+                <td className="p-2">Empty</td>
+                <td className="p-2">Empty</td>
+            </tr>
+        )
+
+    }
 
     const applyTeam = () => {
         navigate(`/reg/user/${props.team_id}`);
@@ -49,12 +49,19 @@ export default function Team(props) {
         navigate(`/update_team/${props.team_id}`);
     }
 
+    const handleDelete = () => {
+        deleteTeam(props.team_id).then(res => {
+            console.log(res);
+            navigate("/dashboard");
+        }).catch(err => console.log(err));
+    }
+
     return (
-        <div className="p-4 h-full z-10 bg-white rounded-md border-[1.5px] border-green-600 shadow-lg shadow-green-800/15 hover:scale-105 transition ">
+        <div className="p-4 h-full z-10 bg-white rounded-md border-[1.5px] border-green-600 shadow-lg shadow-green-800/15 hover:scale-105 transform transition-transform duration-300">
             <h2 className="text-lg capitalize text-gray-700 font-semibold mb-4">Team {props.team_id}</h2>
             {props.admin && <div className="flex w-1/2 my-3.5">
-                <button onClick={handleEdit} className="flex-1 px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition cursor-pointer" >Edit</button>
-                <button onClick={deleteTeam} className="flex-1 px-4 py-2 mx-3.5 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition cursor-pointer" >Delete</button>
+                <button onClick={handleEdit} className="flex-1 px-4 py-2 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition cursor-pointer" >Edit</button>
+                <button onClick={handleDelete} className="flex-1 px-4 py-2 mx-3.5 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition cursor-pointer" >Delete</button>
             </div>}
             <table className="w-full text-center rounded-md shadow shadow-green-100 bg-green-100 overflow-hidden">
                 <thead className="uppercase text-white text-sm">
@@ -72,12 +79,23 @@ export default function Team(props) {
             </table>
             <div className="flex items-center justify-between mt-4">
                 {leader && (
-                    <div>
+                    <div className="flex flex-col items-start space-y-1">
                         <p className="font-semibold">Leader: {leader.name}</p>
-                        <p className="font-semibold">Telephone: {leader.phone_no}</p>
+                        <p className="font-semibold">
+                            WhatsApp:{" "}
+                            <a
+                                href={`https://wa.me/94${leader.phone_no.slice(1)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-500 hover:underline"
+                            >
+                                {leader.phone_no}
+                            </a>
+                        </p>
                     </div>
+
                 )}
-                {empSlots.length > 0 && !props.admin && <button className="px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition cursor-pointer" onClick={applyTeam} >Apply</button>}
+                {EmpSlots.length > 0 && !props.admin && <button className="px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition cursor-pointer" onClick={applyTeam} >Apply</button>}
             </div>
         </div>
     );

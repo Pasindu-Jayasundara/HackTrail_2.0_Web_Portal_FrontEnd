@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { validateForm } from "../utils/validation";
 import { registerUser } from "../api/api";
+import { useNavigate } from "react-router-dom";
 
-export default function UserForm({ availableLevels, teamId }) {
+
+export default function UserForm({ members, teamId }) {
+    const navigate =  useNavigate();
 
     const [userForm, setUserForm] = useState({
         name: "",
@@ -31,10 +34,21 @@ export default function UserForm({ availableLevels, teamId }) {
     };
 
 
-    const handleFormSubmit = async(e) => {
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
         const validationErrors = await validateForm(userForm);
         setErrors(validationErrors);
+
+        const levelInstances = members.filter(mem => mem.level == userForm.level);
+
+        if (levelInstances.length > 1) {
+            setErrors({
+                ...setErrors,
+                level: "There can be only maximum 2 members from each level"
+            })
+            return
+        }
+
 
         if (Object.keys(validationErrors).length === 0) {
             const newUser = {
@@ -43,7 +57,10 @@ export default function UserForm({ availableLevels, teamId }) {
             };
 
             registerUser(newUser)
-                .then(res => console.log(res))
+                .then(res => {
+                    console.log(res);
+                    navigate("/teams");
+                })
                 .catch(err => console.error(err));
 
             setUserForm({
@@ -68,81 +85,106 @@ export default function UserForm({ availableLevels, teamId }) {
 
 
     return (
-        <form onSubmit={handleFormSubmit}>
+        <form onSubmit={handleFormSubmit} className="max-w-xl mx-auto rounded-md border-[1.5px] border-green-600 shadow-lg shadow-green-800/15 space-y-6 bg-white p-8">
             <div>
-                <label>Name:</label>
+                <label className="block mb-1 text-sm font-medium text-gray-700">Name</label>
                 <input
                     type="text"
                     name="name"
                     value={userForm.name}
                     onChange={handleInputChange}
-                    required
+                    className="bg-green-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-green-400 focus:border-green-400 block w-full p-3"
                 />
-                {errors.name !== "" && <p>{errors.name}</p>}
+                {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name}</p>}
             </div>
+
             <div>
-                <label>Email:</label>
+                <label className="block mb-1 text-sm font-medium text-gray-700">Email</label>
                 <input
                     type="email"
                     name="email"
                     value={userForm.email}
                     onChange={handleInputChange}
-                    required
+                    className="bg-green-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-green-400 focus:border-green-400 block w-full p-3"
                 />
-                {errors.email !== "" && <p>{errors.email}</p>}
+                {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email}</p>}
             </div>
+
             <div>
-                <label>TG Number:</label>
+                <label className="block mb-1 text-sm font-medium text-gray-700">TG Number</label>
                 <input
                     type="text"
                     name="tg"
                     value={userForm.tg}
                     onChange={handleInputChange}
-                    required
+                    className="bg-green-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-green-400 focus:border-green-400 block w-full p-3"
                 />
-                {errors.tg !== "" && <p>{errors.tg}</p>}
+                {errors.tg && <p className="text-sm text-red-600 mt-1">{errors.tg}</p>}
             </div>
+
             <div>
-                <label>Level:</label>
+                <label className="block mb-1 text-sm font-medium text-gray-700">Level</label>
                 <select
                     name="level"
                     value={userForm.level}
                     onChange={handleInputChange}
-                    required
+                    className="bg-green-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-green-400 focus:border-green-400 block w-full p-3"
                 >
                     <option value="">Select level</option>
-                    {availableLevels.map(level => (
-                        <option key={level} value={level}>{level}</option>
-                    ))}
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+
                 </select>
-                {errors.level !== "" && <p>{errors.level}</p>}
+                {errors.level && <p className="text-sm text-red-600 mt-1">{errors.level}</p>}
             </div>
+
             <div>
-                <label>Gender:</label>
+                <label className="block mb-1 text-sm font-medium text-gray-700">Gender</label>
                 <select
                     name="gender"
                     value={userForm.gender}
                     onChange={handleInputChange}
-                    required
+                    className="bg-green-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-green-400 focus:border-green-400 block w-full p-3"
                 >
                     <option value="">Select gender</option>
                     <option value="M">Male</option>
                     <option value="F">Female</option>
                 </select>
-                {errors.gender !== "" && <p>{errors.gender}</p>}
+                {errors.gender && <p className="text-sm text-red-600 mt-1">{errors.gender}</p>}
             </div>
+
             <div>
-                <label>Phone Number:</label>
+                <label className="block mb-1 text-sm font-medium text-gray-700">Phone Number</label>
                 <input
                     type="text"
                     name="phone_no"
                     value={userForm.phone_no}
                     onChange={handleInputChange}
-                    required
+                    className="bg-green-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-green-400 focus:border-green-400 block w-full p-3"
                 />
-                {errors.phone_no !== "" && <p>{errors.phone_no}</p>}
+                {errors.phone_no && <p className="text-sm text-red-600 mt-1">{errors.phone_no}</p>}
             </div>
-            <button type="submit">Add</button>
+
+            <button
+                type="submit"
+                className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-md transition duration-300"
+            >
+                Register
+            </button>
+
+            {members.length == 5 ? (
+                <p className="mt-2 text-sm text-center text-gray-600">
+                    Team has no empty slots
+                </p>
+            ) : (
+                <p className="mt-2 text-sm text-center text-gray-600">
+                    {5 - members.length} slots are available
+                </p>
+            )}
         </form>
+
     )
 }

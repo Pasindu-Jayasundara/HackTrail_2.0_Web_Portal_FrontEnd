@@ -11,6 +11,7 @@ import RegisterLayout from './layouts/RegisterLayout'
 import NotFound from './components/NotFound'
 import ProtectedRoute from './components/ProtectedRoute'
 import { useAuth } from './hooks/AuthContext'
+import GuideLines from './pages/GuideLines'
 
 export default function App() {
 
@@ -32,6 +33,7 @@ export default function App() {
           <Route path='dashboard' element={<AdminDashboard />} />
           <Route path='update_team/:id' element={<UpdateTeam />} />
         </Route>
+        <Route path='guidelines' element={<GuideLines /> } />
         <Route path="*" element={<NotFound />} />
       </Route>
     )
