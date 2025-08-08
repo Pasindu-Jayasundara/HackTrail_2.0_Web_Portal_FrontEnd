@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Team from "../components/Team";
 import { fetchTeams, jsonToExcel } from "../api/api";
 import StatsPanel from "../components/StatsPanel";
+import Spinner from "../components/Spinner";
 
 export default function AdminDashboard() {
     const [teams, setTeams] = useState([]);
