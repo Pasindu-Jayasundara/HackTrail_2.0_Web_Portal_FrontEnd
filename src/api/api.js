@@ -3,7 +3,7 @@ import axios from "../utils/axios";
 
 export const registerTeam = async (team) => {
   try {
-    const res = await axios.post(`/registration/team`, team);
+    const res = await axios.post(`/api/v1/registration/team`, team);
     return res.data;
   } catch (err) {
     console.error("Error Registering Team", err.message);
