@@ -106,7 +106,7 @@ export const jsonToExcel = async () => {
 
 export const handleLogIn = async (credentials) => {
   try {
-    const res = await axios.post("/auth/login", credentials);
+    const res = await axios.post("/api/v1/auth/login", credentials);
     return res.data;
   } catch (err) {
     console.error("Error logging user", err.message);
